@@ -79,7 +79,7 @@ A public demo instance runs with mock data — no real Foundry account needed. I
 {
   "mcpServers": {
     "adaptyv-foundry-demo": {
-      "url": "https://adaptyv-foundry.onrender.com/mcp",
+      "url": "https://adaptyv-foundry-mcp.onrender.com/mcp",
       "headers": {
         "Authorization": "Bearer adaptyv-foundry-demo"
       }
@@ -94,7 +94,7 @@ A public demo instance runs with mock data — no real Foundry account needed. I
 {
   "mcpServers": {
     "adaptyv-foundry-demo": {
-      "url": "https://adaptyv-foundry.onrender.com/mcp",
+      "url": "https://adaptyv-foundry-mcp.onrender.com/mcp",
       "headers": {
         "Authorization": "Bearer adaptyv-foundry-demo"
       }
@@ -103,7 +103,7 @@ A public demo instance runs with mock data — no real Foundry account needed. I
 }
 ```
 
-Health check: [`https://adaptyv-foundry.onrender.com/health`](https://adaptyv-foundry.onrender.com/health)
+Health check: [`https://adaptyv-foundry-mcp.onrender.com/health`](https://adaptyv-foundry-mcp.onrender.com/health)
 
 > The demo runs on Render's free tier and may spin down after inactivity — the first request after a cold start can take ~30 seconds.
 
@@ -113,7 +113,7 @@ Health check: [`https://adaptyv-foundry.onrender.com/health`](https://adaptyv-fo
 
 - [ ] **Fly.io one-click deployment** — `fly.toml` is already in the repo; the goal is a proper deploy button and documented secrets workflow matching the Render experience.
 - [ ] **End-to-end tests against the live Foundry API** — current tests run fully against mock data derived from the OpenAPI spec. The next step is an opt-in E2E suite that fires against a real `FOUNDRY_API_TOKEN` to validate the full request/response cycle.
-- [ ] **Slack notification delivery** — see the companion project below.
+- [ ] **Leaner tool surface** — revisit how many MCP tools we expose versus how Adaptyv API endpoints are grouped, so the tool list and descriptions don’t dominate the model’s context window or overwhelm typical chat sessions.
 
 ---
 

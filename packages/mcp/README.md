@@ -28,8 +28,8 @@ TypeScript client used internally: [**`@adaptyv/foundry-sdk`**](../sdk/README.md
 
 Example deployment (operator may use mock or live Foundry):
 
-- **Health:** `https://adaptyv-foundry.onrender.com/health`
-- **MCP:** `https://adaptyv-foundry.onrender.com/mcp` — send **`Authorization: Bearer <MCP_HTTP_API_KEY>`** matching that deployment’s secret.
+- **Health:** `https://adaptyv-foundry-mcp.onrender.com/health`
+- **MCP:** `https://adaptyv-foundry-mcp.onrender.com/mcp` — send **`Authorization: Bearer <MCP_HTTP_API_KEY>`** matching that deployment’s secret.
 
 For anything serious, deploy your own instance below.
 
@@ -200,7 +200,7 @@ In the Inspector UI, run a tool such as **`list_targets`**. Expect a **Foundry A
 
 Cursor can talk to this server over **HTTP** the same way as MCP Inspector: the app must be **running** (`pnpm run start:http` or `pnpm exec tsx` with `MODE=http`), and the **Bearer must match** `MCP_HTTP_API_KEY`.
 
-**Remote:** use your deploy URL with path **`/mcp`**, e.g. `https://adaptyv-foundry.onrender.com/mcp`.
+**Remote:** use your deploy URL with path **`/mcp`**, e.g. `https://adaptyv-foundry-mcp.onrender.com/mcp`.
 
 1. **Merge** a server entry into your MCP config (do not replace the whole file if you already have servers):
    - **Project:** `.cursor/mcp.json` in this repo, or  
