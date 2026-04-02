@@ -24,7 +24,7 @@ The recommended path is a one-click **Render** deployment using the included [Bl
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/joostwmd/adaptyv-mcp)
 
-After deploy, Render auto-generates `MCP_HTTP_API_KEY`. You must set `FOUNDRY_API_TOKEN` manually in the Render dashboard (your Adaptyv Foundry API token). Then install the server in your MCP client:
+During one-click deploy, Render asks for **`FOUNDRY_API_TOKEN`** and **`MCP_HTTP_API_KEY`**: your Adaptyv Foundry API token and the secret clients send as `Authorization: Bearer …` on `/mcp`. You can change either later under **Environment**. Then install the server in your MCP client:
 
 **Cursor** — add to `~/.cursor/mcp.json`:
 

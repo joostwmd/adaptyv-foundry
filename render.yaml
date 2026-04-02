@@ -1,8 +1,8 @@
 # Render Blueprint — https://render.com/docs/blueprint-spec
 #
-# MCP_HTTP_API_KEY: generateValue — Render creates a secret on deploy; copy it from
-# Dashboard → Environment → MCP_HTTP_API_KEY and use the same value in Cursor as
-#   Authorization: Bearer <MCP_HTTP_API_KEY>
+# MCP_HTTP_API_KEY: sync false — you set it during one-click deploy (or later in the
+# dashboard). Use the same value in Cursor as Authorization: Bearer <MCP_HTTP_API_KEY>.
+# To auto-generate instead, replace with: generateValue: true
 #
 # FOUNDRY_API_TOKEN: sync false — you MUST set this in the dashboard (Adaptyv Foundry
 # API token). Until it is set, the service will crash after MCP_HTTP_API_KEY passes.
@@ -28,4 +28,4 @@ services:
       - key: FOUNDRY_API_TOKEN
         sync: false
       - key: MCP_HTTP_API_KEY
-        generateValue: true
+        sync: false
