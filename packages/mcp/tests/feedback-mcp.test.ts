@@ -1,4 +1,4 @@
-import { feedbackFixtures } from "@adaptyv/foundry-shared/fixtures";
+import { feedbackMockData } from "@adaptyv/foundry-shared/mockdata";
 import { FoundryApiError } from "@adaptyv/foundry-sdk";
 import { describe, expect, it } from "vitest";
 import { createMockClient, withMcpSession } from "./test-utils.js";
@@ -6,11 +6,11 @@ import { createMockClient, withMcpSession } from "./test-utils.js";
 describe("MCP tools — feedback", () => {
   it("submit_feedback — success", async () => {
     const mock = createMockClient();
-    mock.feedback.submit.mockResolvedValue(feedbackFixtures.submit.response);
+    mock.feedback.submit.mockResolvedValue(feedbackMockData.submit.response);
     await withMcpSession(mock, async (c) => {
       const out = await c.callTool({
         name: "submit_feedback",
-        arguments: { ...feedbackFixtures.submit.requestBody },
+        arguments: { ...feedbackMockData.submit.requestBody },
       });
       expect(out.content[0].text).toContain("Feedback recorded");
     });
@@ -24,7 +24,7 @@ describe("MCP tools — feedback", () => {
     await withMcpSession(mock, async (c) => {
       const out = await c.callTool({
         name: "submit_feedback",
-        arguments: { ...feedbackFixtures.submit.requestBody },
+        arguments: { ...feedbackMockData.submit.requestBody },
       });
       expect(out.isError).toBe(true);
     });

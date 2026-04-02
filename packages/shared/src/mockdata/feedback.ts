@@ -1,4 +1,4 @@
-export const feedbackFixtures = {
+export const feedbackMockData = {
   submit: {
     requestBody: {
       request_uuid: "01900abc-1234-7890-1234-567890abcdef",

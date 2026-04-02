@@ -1,4 +1,4 @@
-import { resultFixtures } from "@adaptyv/foundry-shared/fixtures";
+import { resultMockData } from "@adaptyv/foundry-shared/mockdata";
 import { FoundryApiError } from "@adaptyv/foundry-sdk";
 import { describe, expect, it } from "vitest";
 import { createMockClient, withMcpSession } from "./test-utils.js";
@@ -6,11 +6,11 @@ import { createMockClient, withMcpSession } from "./test-utils.js";
 describe("MCP tools — results", () => {
   it("list_results — success", async () => {
     const mock = createMockClient();
-    mock.results.list.mockResolvedValue(resultFixtures.list.response);
+    mock.results.list.mockResolvedValue(resultMockData.list.response);
     await withMcpSession(mock, async (c) => {
       const out = await c.callTool({
         name: "list_results",
-        arguments: { ...resultFixtures.list.query },
+        arguments: { ...resultMockData.list.query },
       });
       expect(out.content[0].text).toContain("KD");
     });
@@ -18,11 +18,11 @@ describe("MCP tools — results", () => {
 
   it("get_result — success", async () => {
     const mock = createMockClient();
-    mock.results.get.mockResolvedValue(resultFixtures.get.response);
+    mock.results.get.mockResolvedValue(resultMockData.get.response);
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "get_result",
-        arguments: { ...resultFixtures.get.path },
+        arguments: { ...resultMockData.get.path },
       });
     });
   });
@@ -30,12 +30,12 @@ describe("MCP tools — results", () => {
   it("list_experiment_results — success", async () => {
     const mock = createMockClient();
     mock.results.listForExperiment.mockResolvedValue(
-      resultFixtures.listForExperiment.response,
+      resultMockData.listForExperiment.response,
     );
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "list_experiment_results",
-        arguments: { ...resultFixtures.listForExperiment.input },
+        arguments: { ...resultMockData.listForExperiment.input },
       });
     });
   });

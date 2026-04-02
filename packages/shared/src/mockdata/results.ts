@@ -1,6 +1,6 @@
-import { fixtureIds } from "./common.js";
+import { mockIds } from "./common.js";
 
-const exp1 = fixtureIds.experiments.draftScreening;
+const exp1 = mockIds.experiments.draftScreening;
 
 const resultItem = {
   id: "019e1111-0000-0000-0000-000000000003",
@@ -20,7 +20,7 @@ const resultItem = {
 const thermoResult = {
   id: "019e2222-0000-0000-0000-000000000010",
   title: "DSF Tm summary — nanobody panel",
-  experiment_id: fixtureIds.experiments.doneThermostability,
+  experiment_id: mockIds.experiments.doneThermostability,
   result_type: "thermostability",
   created_at: "2026-02-28T11:00:00Z",
   summary: [
@@ -32,7 +32,7 @@ const thermoResult = {
   data_package_url: "https://data.adaptyvbio.com/pkg/019e2222",
 } as const;
 
-export const resultFixtures = {
+export const resultMockData = {
   list: {
     query: { limit: 10, offset: 0 },
     response: {

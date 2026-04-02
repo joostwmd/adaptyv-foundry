@@ -1,4 +1,4 @@
-import { targetFixtures } from "@adaptyv/foundry-shared/fixtures";
+import { targetMockData } from "@adaptyv/foundry-shared/mockdata";
 import { listTargetsInputSchema, targetListResponseSchema } from "@adaptyv/foundry-shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FoundryClient } from "../src/client.js";
@@ -39,7 +39,7 @@ describe("FoundryClient options", () => {
 
   it("uses FOUNDRY_API_TOKEN when apiKey is omitted", async () => {
     process.env.FOUNDRY_API_TOKEN = "from-env";
-    fetchMock.mockResolvedValue(jsonResponse(targetFixtures.list.response));
+    fetchMock.mockResolvedValue(jsonResponse(targetMockData.list.response));
 
     const client = new FoundryClient({});
     const query = listTargetsInputSchema.parse({ limit: 1 });
@@ -84,7 +84,7 @@ describe("FoundryClient base URL resolution", () => {
 
   it("uses FOUNDRY_API_BASE_URL when options.baseUrl is omitted", async () => {
     process.env.FOUNDRY_API_BASE_URL = "https://env-base.example.com/api/v1";
-    fetchMock.mockResolvedValue(jsonResponse(targetFixtures.list.response));
+    fetchMock.mockResolvedValue(jsonResponse(targetMockData.list.response));
     const client = new FoundryClient({});
     await client.targets.list({});
     const [url] = fetchMock.mock.calls[0] as [string, RequestInit];
@@ -95,7 +95,7 @@ describe("FoundryClient base URL resolution", () => {
 
   it("prefers options.baseUrl over FOUNDRY_API_BASE_URL", async () => {
     process.env.FOUNDRY_API_BASE_URL = "https://wrong.example.com/api/v1";
-    fetchMock.mockResolvedValue(jsonResponse(targetFixtures.list.response));
+    fetchMock.mockResolvedValue(jsonResponse(targetMockData.list.response));
     const client = new FoundryClient({
       baseUrl: "https://right.example.com/api/v1",
     });
@@ -108,7 +108,7 @@ describe("FoundryClient base URL resolution", () => {
   });
 
   it("strips a single trailing slash from baseUrl before joining paths", async () => {
-    fetchMock.mockResolvedValue(jsonResponse(targetFixtures.list.response));
+    fetchMock.mockResolvedValue(jsonResponse(targetMockData.list.response));
     const client = new FoundryClient({
       apiKey: "test-token",
       baseUrl: "https://custom.example.com/api/v1/",

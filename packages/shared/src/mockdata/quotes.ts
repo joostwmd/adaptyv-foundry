@@ -1,4 +1,4 @@
-export const quoteFixtures = {
+export const quoteMockData = {
   list: {
     query: { limit: 50, offset: 0 },
     response: {

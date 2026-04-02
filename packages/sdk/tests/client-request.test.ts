@@ -1,8 +1,8 @@
 import { experimentListResponseSchema } from "@adaptyv/foundry-shared";
 import {
   errorBody,
-  experimentFixtures,
-} from "@adaptyv/foundry-shared/fixtures";
+  experimentMockData,
+} from "@adaptyv/foundry-shared/mockdata";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FoundryApiError, FoundryClient } from "../src/client.js";
 import {
@@ -47,15 +47,15 @@ describe("FoundryClient.request (mutation-hardening)", () => {
 
   it("parses JSON success when content-type includes charset", async () => {
     fetchMock.mockResolvedValue(
-      jsonResponseWithJsonCharset(experimentFixtures.list.response),
+      jsonResponseWithJsonCharset(experimentMockData.list.response),
     );
     const out = await client().experiments.list({});
     experimentListResponseSchema.parse(out);
-    expect(out).toEqual(experimentFixtures.list.response);
+    expect(out).toEqual(experimentMockData.list.response);
   });
 
   it("prefixes path when it does not start with /", async () => {
-    fetchMock.mockResolvedValue(jsonResponse(experimentFixtures.list.response));
+    fetchMock.mockResolvedValue(jsonResponse(experimentMockData.list.response));
     await client().request({
       method: "GET",
       path: "experiments",
@@ -69,7 +69,7 @@ describe("FoundryClient.request (mutation-hardening)", () => {
   });
 
   it("omits null and undefined query values but serializes other keys", async () => {
-    fetchMock.mockResolvedValue(jsonResponse(experimentFixtures.list.response));
+    fetchMock.mockResolvedValue(jsonResponse(experimentMockData.list.response));
     await client().request({
       method: "GET",
       path: "/experiments",
@@ -125,17 +125,17 @@ describe("FoundryClient.request (mutation-hardening)", () => {
       status: 200,
       headers: new Headers(),
       json: () => Promise.reject(new Error("json should not run")),
-      text: () => Promise.resolve(JSON.stringify(experimentFixtures.list.response)),
+      text: () => Promise.resolve(JSON.stringify(experimentMockData.list.response)),
     } as Response);
     const out = await client().experiments.list({});
     expect(typeof out).toBe("string");
     experimentListResponseSchema.parse(JSON.parse(out as string));
-    expect(JSON.parse(out as string)).toEqual(experimentFixtures.list.response);
+    expect(JSON.parse(out as string)).toEqual(experimentMockData.list.response);
   });
 
   it("PATCH with JSON body requires POST-or-PATCH branch for Content-Type", async () => {
     fetchMock.mockResolvedValue(
-      jsonResponse(experimentFixtures.update.response),
+      jsonResponse(experimentMockData.update.response),
     );
     await client().request({
       method: "PATCH",

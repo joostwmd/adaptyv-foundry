@@ -1,8 +1,8 @@
-import { fixtureIds } from "./common.js";
+import { mockIds } from "./common.js";
 
-const exp1 = fixtureIds.experiments.draftScreening;
+const exp1 = mockIds.experiments.draftScreening;
 
-export const updateFixtures = {
+export const updateMockData = {
   list: {
     query: { limit: 50, offset: 0 },
     response: {

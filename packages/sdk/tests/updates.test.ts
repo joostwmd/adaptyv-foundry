@@ -6,7 +6,7 @@ import {
 } from "@adaptyv/foundry-shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FoundryClient } from "../src/client.js";
-import { errorBody, updateFixtures } from "@adaptyv/foundry-shared/fixtures";
+import { errorBody, updateMockData } from "@adaptyv/foundry-shared/mockdata";
 import {
   assertLastFetch,
   installFetchMock,
@@ -29,11 +29,11 @@ describe("UpdatesResource", () => {
   const client = () => new FoundryClient({ apiKey: "test-token" });
 
   it("list — success", async () => {
-    const query = listUpdatesInputSchema.parse({ ...updateFixtures.list.query });
-    fetchMock.mockResolvedValue(jsonResponse(updateFixtures.list.response));
+    const query = listUpdatesInputSchema.parse({ ...updateMockData.list.query });
+    fetchMock.mockResolvedValue(jsonResponse(updateMockData.list.response));
     const out = await client().updates.list(query);
     updateListResponseSchema.parse(out);
-    expect(out).toEqual(updateFixtures.list.response);
+    expect(out).toEqual(updateMockData.list.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: "/updates",
@@ -52,15 +52,15 @@ describe("UpdatesResource", () => {
 
   it("listForExperiment — success", async () => {
     const input = listUpdatesForExperimentInputSchema.parse({
-      ...updateFixtures.listForExperiment.input,
+      ...updateMockData.listForExperiment.input,
     });
     const { experiment_id } = input;
     fetchMock.mockResolvedValue(
-      jsonResponse(updateFixtures.listForExperiment.response),
+      jsonResponse(updateMockData.listForExperiment.response),
     );
     const out = await client().updates.listForExperiment(input);
     updateListResponseSchema.parse(out);
-    expect(out).toEqual(updateFixtures.listForExperiment.response);
+    expect(out).toEqual(updateMockData.listForExperiment.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: `/experiments/${experiment_id}/updates`,

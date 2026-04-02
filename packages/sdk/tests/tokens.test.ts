@@ -9,7 +9,7 @@ import {
 } from "@adaptyv/foundry-shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FoundryClient } from "../src/client.js";
-import { errorBody, tokenFixtures } from "@adaptyv/foundry-shared/fixtures";
+import { errorBody, tokenMockData } from "@adaptyv/foundry-shared/mockdata";
 import {
   assertLastFetch,
   installFetchMock,
@@ -32,11 +32,11 @@ describe("TokensResource", () => {
   const client = () => new FoundryClient({ apiKey: "test-token" });
 
   it("list — success", async () => {
-    const query = listTokensInputSchema.parse({ ...tokenFixtures.list.query });
-    fetchMock.mockResolvedValue(jsonResponse(tokenFixtures.list.response));
+    const query = listTokensInputSchema.parse({ ...tokenMockData.list.query });
+    fetchMock.mockResolvedValue(jsonResponse(tokenMockData.list.response));
     const out = await client().tokens.list(query);
     tokenListResponseSchema.parse(out);
-    expect(out).toEqual(tokenFixtures.list.response);
+    expect(out).toEqual(tokenMockData.list.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: "/tokens",
@@ -55,19 +55,19 @@ describe("TokensResource", () => {
 
   it("attenuate — success (201)", async () => {
     const body = attenuateTokenInputSchema.parse({
-      ...tokenFixtures.attenuate.requestBody,
+      ...tokenMockData.attenuate.requestBody,
     });
     fetchMock.mockResolvedValue(
-      jsonResponse(tokenFixtures.attenuate.response, { status: 201 }),
+      jsonResponse(tokenMockData.attenuate.response, { status: 201 }),
     );
     const out = await client().tokens.attenuate(body);
     attenuateTokenResponseSchema.parse(out);
-    expect(out).toEqual(tokenFixtures.attenuate.response);
+    expect(out).toEqual(tokenMockData.attenuate.response);
     assertLastFetch(fetchMock, {
       method: "POST",
       urlIncludes: "/tokens/attenuate",
       accept: JSON_ACCEPT,
-      body: tokenFixtures.attenuate.requestBody,
+      body: tokenMockData.attenuate.requestBody,
     });
   });
 
@@ -84,10 +84,10 @@ describe("TokensResource", () => {
 
   it("revoke — success", async () => {
     const input = revokeTokenInputSchema.parse({});
-    fetchMock.mockResolvedValue(jsonResponse(tokenFixtures.revoke.response));
+    fetchMock.mockResolvedValue(jsonResponse(tokenMockData.revoke.response));
     const out = await client().tokens.revoke(input);
     revokeTokenResponseSchema.parse(out);
-    expect(out).toEqual(tokenFixtures.revoke.response);
+    expect(out).toEqual(tokenMockData.revoke.response);
     assertLastFetch(fetchMock, {
       method: "POST",
       urlIncludes: "/tokens/revoke",

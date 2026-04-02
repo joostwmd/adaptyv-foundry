@@ -1,4 +1,4 @@
-import { updateFixtures } from "@adaptyv/foundry-shared/fixtures";
+import { updateMockData } from "@adaptyv/foundry-shared/mockdata";
 import { FoundryApiError } from "@adaptyv/foundry-sdk";
 import { describe, expect, it } from "vitest";
 import { createMockClient, withMcpSession } from "./test-utils.js";
@@ -6,11 +6,11 @@ import { createMockClient, withMcpSession } from "./test-utils.js";
 describe("MCP tools — updates", () => {
   it("list_updates — success", async () => {
     const mock = createMockClient();
-    mock.updates.list.mockResolvedValue(updateFixtures.list.response);
+    mock.updates.list.mockResolvedValue(updateMockData.list.response);
     await withMcpSession(mock, async (c) => {
       const out = await c.callTool({
         name: "list_updates",
-        arguments: { ...updateFixtures.list.query },
+        arguments: { ...updateMockData.list.query },
       });
       expect(out.content[0].text).toContain("Experiment created");
     });
@@ -19,12 +19,12 @@ describe("MCP tools — updates", () => {
   it("list_experiment_updates — success", async () => {
     const mock = createMockClient();
     mock.updates.listForExperiment.mockResolvedValue(
-      updateFixtures.listForExperiment.response,
+      updateMockData.listForExperiment.response,
     );
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "list_experiment_updates",
-        arguments: { ...updateFixtures.listForExperiment.input },
+        arguments: { ...updateMockData.listForExperiment.input },
       });
     });
   });

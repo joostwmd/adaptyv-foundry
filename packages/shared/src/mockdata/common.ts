@@ -5,7 +5,7 @@ export const errorBody = {
 } as const;
 
 /** Additional canned API error bodies for demos and MCP mock scenarios. */
-export const fixtureErrors = {
+export const mockErrors = {
   notFound: {
     error: "resource not found",
     request_id: "req_019462a4-b1c2-7def-8901-23456789aaaa",
@@ -20,14 +20,14 @@ export const fixtureErrors = {
   },
 } as const;
 
-export const fixtureMeta = {
+export const mockMeta = {
   description:
     "Example request/response bodies aligned with Adaptyv Foundry OpenAPI (see packages/sdk/tests/openapi.json).",
   openapiUrl: "https://foundry-api-public.adaptyvbio.com/api/v1/openapi.json",
 } as const;
 
-/** Stable IDs for cross-referencing across fixture modules (demo dataset). */
-export const fixtureIds = {
+/** Stable IDs for cross-referencing across mockdata modules (demo dataset). */
+export const mockIds = {
   targets: {
     her2: "c383cc1d-fe22-5dbf-953c-378bc073019d",
     pdl1: "f3b2afd0-f70b-5191-a90a-ae1e0545c744",

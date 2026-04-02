@@ -1,4 +1,4 @@
-import { targetFixtures } from "@adaptyv/foundry-shared/fixtures";
+import { targetMockData } from "@adaptyv/foundry-shared/mockdata";
 import { FoundryApiError } from "@adaptyv/foundry-sdk";
 import { describe, expect, it } from "vitest";
 import { createMockClient, withMcpSession } from "./test-utils.js";
@@ -6,11 +6,11 @@ import { createMockClient, withMcpSession } from "./test-utils.js";
 describe("MCP tools — targets", () => {
   it("list_targets — success", async () => {
     const mock = createMockClient();
-    mock.targets.list.mockResolvedValue(targetFixtures.list.response);
+    mock.targets.list.mockResolvedValue(targetMockData.list.response);
     await withMcpSession(mock, async (c) => {
       const out = await c.callTool({
         name: "list_targets",
-        arguments: { ...targetFixtures.list.query },
+        arguments: { ...targetMockData.list.query },
       });
       expect(out.isError).not.toBe(true);
       expect(out.content[0].type).toBe("text");
@@ -21,11 +21,11 @@ describe("MCP tools — targets", () => {
 
   it("get_target — success", async () => {
     const mock = createMockClient();
-    mock.targets.get.mockResolvedValue(targetFixtures.get.response);
+    mock.targets.get.mockResolvedValue(targetMockData.get.response);
     await withMcpSession(mock, async (c) => {
       const out = await c.callTool({
         name: "get_target",
-        arguments: { ...targetFixtures.get.path },
+        arguments: { ...targetMockData.get.path },
       });
       expect(out.content[0].text).toContain("PD-L1");
     });
@@ -34,12 +34,12 @@ describe("MCP tools — targets", () => {
   it("list_custom_target_requests — success", async () => {
     const mock = createMockClient();
     mock.targets.listCustomRequests.mockResolvedValue(
-      targetFixtures.listCustomRequests.response,
+      targetMockData.listCustomRequests.response,
     );
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "list_custom_target_requests",
-        arguments: { ...targetFixtures.listCustomRequests.query },
+        arguments: { ...targetMockData.listCustomRequests.query },
       });
       expect(mock.targets.listCustomRequests).toHaveBeenCalled();
     });
@@ -48,12 +48,12 @@ describe("MCP tools — targets", () => {
   it("get_custom_target_request — success", async () => {
     const mock = createMockClient();
     mock.targets.getCustomRequest.mockResolvedValue(
-      targetFixtures.getCustomRequest.response,
+      targetMockData.getCustomRequest.response,
     );
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "get_custom_target_request",
-        arguments: { ...targetFixtures.getCustomRequest.path },
+        arguments: { ...targetMockData.getCustomRequest.path },
       });
     });
   });
@@ -61,12 +61,12 @@ describe("MCP tools — targets", () => {
   it("request_custom_target — success", async () => {
     const mock = createMockClient();
     mock.targets.requestCustom.mockResolvedValue(
-      targetFixtures.requestCustom.response,
+      targetMockData.requestCustom.response,
     );
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "request_custom_target",
-        arguments: { ...targetFixtures.requestCustom.requestBody },
+        arguments: { ...targetMockData.requestCustom.requestBody },
       });
     });
   });

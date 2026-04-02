@@ -1,4 +1,4 @@
-export const tokenFixtures = {
+export const tokenMockData = {
   list: {
     query: { limit: 50, offset: 0 },
     response: {

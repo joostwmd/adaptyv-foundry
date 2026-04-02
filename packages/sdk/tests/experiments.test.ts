@@ -19,7 +19,7 @@ import {
 } from "@adaptyv/foundry-shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FoundryApiError, FoundryClient } from "../src/client.js";
-import { errorBody, experimentFixtures } from "@adaptyv/foundry-shared/fixtures";
+import { errorBody, experimentMockData } from "@adaptyv/foundry-shared/mockdata";
 import {
   assertLastFetch,
   binaryResponse,
@@ -46,12 +46,12 @@ describe("ExperimentsResource", () => {
 
   it("list — success", async () => {
     const query = listExperimentsInputSchema.parse({
-      ...experimentFixtures.list.query,
+      ...experimentMockData.list.query,
     });
-    fetchMock.mockResolvedValue(jsonResponse(experimentFixtures.list.response));
+    fetchMock.mockResolvedValue(jsonResponse(experimentMockData.list.response));
     const out = await client().experiments.list(query);
     experimentListResponseSchema.parse(out);
-    expect(out).toEqual(experimentFixtures.list.response);
+    expect(out).toEqual(experimentMockData.list.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: "/experiments",
@@ -85,19 +85,19 @@ describe("ExperimentsResource", () => {
 
   it("create — success (201)", async () => {
     const body = createExperimentInputSchema.parse({
-      ...experimentFixtures.create.requestBody,
+      ...experimentMockData.create.requestBody,
     });
     fetchMock.mockResolvedValue(
-      jsonResponse(experimentFixtures.create.response, { status: 201 }),
+      jsonResponse(experimentMockData.create.response, { status: 201 }),
     );
     const out = await client().experiments.create(body);
     createExperimentResponseSchema.parse(out);
-    expect(out).toEqual(experimentFixtures.create.response);
+    expect(out).toEqual(experimentMockData.create.response);
     assertLastFetch(fetchMock, {
       method: "POST",
       urlIncludes: "/experiments",
       accept: JSON_ACCEPT,
-      body: experimentFixtures.create.requestBody,
+      body: experimentMockData.create.requestBody,
     });
   });
 
@@ -113,12 +113,12 @@ describe("ExperimentsResource", () => {
 
   it("get — success", async () => {
     const expPath = getExperimentInputSchema.parse({
-      ...experimentFixtures.get.path,
+      ...experimentMockData.get.path,
     });
-    fetchMock.mockResolvedValue(jsonResponse(experimentFixtures.get.response));
+    fetchMock.mockResolvedValue(jsonResponse(experimentMockData.get.response));
     const out = await client().experiments.get(expPath);
     expInfoSchema.parse(out);
-    expect(out).toEqual(experimentFixtures.get.response);
+    expect(out).toEqual(experimentMockData.get.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: `/experiments/${expPath.experiment_id}`,
@@ -136,13 +136,13 @@ describe("ExperimentsResource", () => {
 
   it("update — success", async () => {
     const input = updateExperimentInputSchema.parse({
-      ...experimentFixtures.update.input,
+      ...experimentMockData.update.input,
     });
     const { experiment_id, ...body } = input;
-    fetchMock.mockResolvedValue(jsonResponse(experimentFixtures.update.response));
+    fetchMock.mockResolvedValue(jsonResponse(experimentMockData.update.response));
     const out = await client().experiments.update(input);
     updateExperimentResponseSchema.parse(out);
-    expect(out).toEqual(experimentFixtures.update.response);
+    expect(out).toEqual(experimentMockData.update.response);
     assertLastFetch(fetchMock, {
       method: "PATCH",
       urlIncludes: `/experiments/${experiment_id}`,
@@ -163,12 +163,12 @@ describe("ExperimentsResource", () => {
 
   it("submit — success", async () => {
     const subPath = submitExperimentInputSchema.parse({
-      ...experimentFixtures.submit.path,
+      ...experimentMockData.submit.path,
     });
-    fetchMock.mockResolvedValue(jsonResponse(experimentFixtures.submit.response));
+    fetchMock.mockResolvedValue(jsonResponse(experimentMockData.submit.response));
     const out = await client().experiments.submit(subPath);
     experimentConfirmationResponseSchema.parse(out);
-    expect(out).toEqual(experimentFixtures.submit.response);
+    expect(out).toEqual(experimentMockData.submit.response);
     assertLastFetch(fetchMock, {
       method: "POST",
       urlIncludes: `/experiments/${subPath.experiment_id}/submit`,
@@ -186,19 +186,19 @@ describe("ExperimentsResource", () => {
 
   it("estimateCost — success", async () => {
     const body = estimateCostInputSchema.parse({
-      ...experimentFixtures.estimateCost.requestBody,
+      ...experimentMockData.estimateCost.requestBody,
     });
     fetchMock.mockResolvedValue(
-      jsonResponse(experimentFixtures.estimateCost.response),
+      jsonResponse(experimentMockData.estimateCost.response),
     );
     const out = await client().experiments.estimateCost(body);
     costEstimateResponseSchema.parse(out);
-    expect(out).toEqual(experimentFixtures.estimateCost.response);
+    expect(out).toEqual(experimentMockData.estimateCost.response);
     assertLastFetch(fetchMock, {
       method: "POST",
       urlIncludes: "/experiments/cost-estimate",
       accept: JSON_ACCEPT,
-      body: experimentFixtures.estimateCost.requestBody,
+      body: experimentMockData.estimateCost.requestBody,
     });
   });
 
@@ -213,14 +213,14 @@ describe("ExperimentsResource", () => {
 
   it("getInvoice — success", async () => {
     const p = getExperimentInputSchema.parse({
-      ...experimentFixtures.getInvoice.path,
+      ...experimentMockData.getInvoice.path,
     });
     fetchMock.mockResolvedValue(
-      jsonResponse(experimentFixtures.getInvoice.response),
+      jsonResponse(experimentMockData.getInvoice.response),
     );
     const out = await client().experiments.getInvoice(p);
     experimentInvoiceResponseSchema.parse(out);
-    expect(out).toEqual(experimentFixtures.getInvoice.response);
+    expect(out).toEqual(experimentMockData.getInvoice.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: "/invoice",
@@ -238,12 +238,12 @@ describe("ExperimentsResource", () => {
 
   it("getQuote — success", async () => {
     const p = getExperimentInputSchema.parse({
-      ...experimentFixtures.getQuote.path,
+      ...experimentMockData.getQuote.path,
     });
-    fetchMock.mockResolvedValue(jsonResponse(experimentFixtures.getQuote.response));
+    fetchMock.mockResolvedValue(jsonResponse(experimentMockData.getQuote.response));
     const out = await client().experiments.getQuote(p);
     experimentQuoteResponseSchema.parse(out);
-    expect(out).toEqual(experimentFixtures.getQuote.response);
+    expect(out).toEqual(experimentMockData.getQuote.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: "/quote",
@@ -261,15 +261,15 @@ describe("ExperimentsResource", () => {
 
   it("confirmQuote — success", async () => {
     const input = confirmExperimentQuoteInputSchema.parse({
-      ...experimentFixtures.confirmQuote.input,
+      ...experimentMockData.confirmQuote.input,
     });
     const { experiment_id, ...body } = input;
     fetchMock.mockResolvedValue(
-      jsonResponse(experimentFixtures.confirmQuote.response),
+      jsonResponse(experimentMockData.confirmQuote.response),
     );
     const out = await client().experiments.confirmQuote(input);
     confirmQuoteResponseSchema.parse(out);
-    expect(out).toEqual(experimentFixtures.confirmQuote.response);
+    expect(out).toEqual(experimentMockData.confirmQuote.response);
     assertLastFetch(fetchMock, {
       method: "POST",
       urlIncludes: `/experiments/${experiment_id}/quote/confirm`,
@@ -289,9 +289,9 @@ describe("ExperimentsResource", () => {
 
   it("getQuotePdf — success", async () => {
     const p = getExperimentInputSchema.parse({
-      ...experimentFixtures.getQuotePdf.path,
+      ...experimentMockData.getQuotePdf.path,
     });
-    const bytes = new Uint8Array([...experimentFixtures.getQuotePdf.bytes]).buffer;
+    const bytes = new Uint8Array([...experimentMockData.getQuotePdf.bytes]).buffer;
     fetchMock.mockResolvedValue(binaryResponse(bytes));
     const out = await client().experiments.getQuotePdf(p);
     expect(out).toBeInstanceOf(ArrayBuffer);

@@ -1,4 +1,4 @@
-import { experimentFixtures } from "@adaptyv/foundry-shared/fixtures";
+import { experimentMockData } from "@adaptyv/foundry-shared/mockdata";
 import { FoundryApiError } from "@adaptyv/foundry-sdk";
 import { describe, expect, it } from "vitest";
 import { createMockClient, withMcpSession } from "./test-utils.js";
@@ -6,11 +6,11 @@ import { createMockClient, withMcpSession } from "./test-utils.js";
 describe("MCP tools — experiments", () => {
   it("list_experiments — success", async () => {
     const mock = createMockClient();
-    mock.experiments.list.mockResolvedValue(experimentFixtures.list.response);
+    mock.experiments.list.mockResolvedValue(experimentMockData.list.response);
     await withMcpSession(mock, async (c) => {
       const out = await c.callTool({
         name: "list_experiments",
-        arguments: { ...experimentFixtures.list.query },
+        arguments: { ...experimentMockData.list.query },
       });
       expect(out.content[0].text).toContain("EXP-2026-001");
     });
@@ -18,22 +18,22 @@ describe("MCP tools — experiments", () => {
 
   it("create_experiment — success", async () => {
     const mock = createMockClient();
-    mock.experiments.create.mockResolvedValue(experimentFixtures.create.response);
+    mock.experiments.create.mockResolvedValue(experimentMockData.create.response);
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "create_experiment",
-        arguments: { ...experimentFixtures.create.requestBody },
+        arguments: { ...experimentMockData.create.requestBody },
       });
     });
   });
 
   it("get_experiment — success", async () => {
     const mock = createMockClient();
-    mock.experiments.get.mockResolvedValue(experimentFixtures.get.response);
+    mock.experiments.get.mockResolvedValue(experimentMockData.get.response);
     await withMcpSession(mock, async (c) => {
       const out = await c.callTool({
         name: "get_experiment",
-        arguments: { ...experimentFixtures.get.path },
+        arguments: { ...experimentMockData.get.path },
       });
       expect(out.content[0].text).toContain("PD-L1 BLI");
     });
@@ -41,22 +41,22 @@ describe("MCP tools — experiments", () => {
 
   it("update_experiment — success", async () => {
     const mock = createMockClient();
-    mock.experiments.update.mockResolvedValue(experimentFixtures.update.response);
+    mock.experiments.update.mockResolvedValue(experimentMockData.update.response);
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "update_experiment",
-        arguments: { ...experimentFixtures.update.input },
+        arguments: { ...experimentMockData.update.input },
       });
     });
   });
 
   it("submit_experiment — success", async () => {
     const mock = createMockClient();
-    mock.experiments.submit.mockResolvedValue(experimentFixtures.submit.response);
+    mock.experiments.submit.mockResolvedValue(experimentMockData.submit.response);
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "submit_experiment",
-        arguments: { ...experimentFixtures.submit.path },
+        arguments: { ...experimentMockData.submit.path },
       });
     });
   });
@@ -64,12 +64,12 @@ describe("MCP tools — experiments", () => {
   it("estimate_cost — success", async () => {
     const mock = createMockClient();
     mock.experiments.estimateCost.mockResolvedValue(
-      experimentFixtures.estimateCost.response,
+      experimentMockData.estimateCost.response,
     );
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "estimate_cost",
-        arguments: { ...experimentFixtures.estimateCost.requestBody },
+        arguments: { ...experimentMockData.estimateCost.requestBody },
       });
     });
   });
@@ -77,23 +77,23 @@ describe("MCP tools — experiments", () => {
   it("get_experiment_invoice — success", async () => {
     const mock = createMockClient();
     mock.experiments.getInvoice.mockResolvedValue(
-      experimentFixtures.getInvoice.response,
+      experimentMockData.getInvoice.response,
     );
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "get_experiment_invoice",
-        arguments: { ...experimentFixtures.getInvoice.path },
+        arguments: { ...experimentMockData.getInvoice.path },
       });
     });
   });
 
   it("get_experiment_quote — success", async () => {
     const mock = createMockClient();
-    mock.experiments.getQuote.mockResolvedValue(experimentFixtures.getQuote.response);
+    mock.experiments.getQuote.mockResolvedValue(experimentMockData.getQuote.response);
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "get_experiment_quote",
-        arguments: { ...experimentFixtures.getQuote.path },
+        arguments: { ...experimentMockData.getQuote.path },
       });
     });
   });
@@ -101,24 +101,24 @@ describe("MCP tools — experiments", () => {
   it("confirm_experiment_quote — success", async () => {
     const mock = createMockClient();
     mock.experiments.confirmQuote.mockResolvedValue(
-      experimentFixtures.confirmQuote.response,
+      experimentMockData.confirmQuote.response,
     );
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "confirm_experiment_quote",
-        arguments: { ...experimentFixtures.confirmQuote.input },
+        arguments: { ...experimentMockData.confirmQuote.input },
       });
     });
   });
 
   it("get_experiment_quote_pdf — binary wrapper", async () => {
     const mock = createMockClient();
-    const bytes = new Uint8Array([...experimentFixtures.getQuotePdf.bytes]).buffer;
+    const bytes = new Uint8Array([...experimentMockData.getQuotePdf.bytes]).buffer;
     mock.experiments.getQuotePdf.mockResolvedValue(bytes);
     await withMcpSession(mock, async (c) => {
       const out = await c.callTool({
         name: "get_experiment_quote_pdf",
-        arguments: { ...experimentFixtures.getQuotePdf.path },
+        arguments: { ...experimentMockData.getQuotePdf.path },
       });
       expect(out.content[0].text).toMatch(/base64-encoded PDF/);
     });

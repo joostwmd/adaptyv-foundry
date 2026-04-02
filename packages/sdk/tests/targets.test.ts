@@ -13,7 +13,7 @@ import {
 } from "@adaptyv/foundry-shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FoundryApiError, FoundryClient } from "../src/client.js";
-import { errorBody, targetFixtures } from "@adaptyv/foundry-shared/fixtures";
+import { errorBody, targetMockData } from "@adaptyv/foundry-shared/mockdata";
 import {
   assertLastFetch,
   installFetchMock,
@@ -37,12 +37,12 @@ describe("TargetsResource", () => {
 
   it("list — success", async () => {
     const query = listTargetsInputSchema.parse({
-      ...targetFixtures.list.query,
+      ...targetMockData.list.query,
     });
-    fetchMock.mockResolvedValue(jsonResponse(targetFixtures.list.response));
+    fetchMock.mockResolvedValue(jsonResponse(targetMockData.list.response));
     const out = await client().targets.list(query);
     targetListResponseSchema.parse(out);
-    expect(out).toEqual(targetFixtures.list.response);
+    expect(out).toEqual(targetMockData.list.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: ["/targets", "search=EGFR", "selfservice_only=true"],
@@ -61,11 +61,11 @@ describe("TargetsResource", () => {
   });
 
   it("get — success", async () => {
-    const tPath = getTargetInputSchema.parse({ ...targetFixtures.get.path });
-    fetchMock.mockResolvedValue(jsonResponse(targetFixtures.get.response));
+    const tPath = getTargetInputSchema.parse({ ...targetMockData.get.path });
+    fetchMock.mockResolvedValue(jsonResponse(targetMockData.get.response));
     const out = await client().targets.get(tPath);
     targetInfoSchema.parse(out);
-    expect(out).toEqual(targetFixtures.get.response);
+    expect(out).toEqual(targetMockData.get.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: `/targets/${tPath.target_id}`,
@@ -83,14 +83,14 @@ describe("TargetsResource", () => {
 
   it("listCustomRequests — success", async () => {
     const q = listCustomTargetRequestsInputSchema.parse({
-      ...targetFixtures.listCustomRequests.query,
+      ...targetMockData.listCustomRequests.query,
     });
     fetchMock.mockResolvedValue(
-      jsonResponse(targetFixtures.listCustomRequests.response),
+      jsonResponse(targetMockData.listCustomRequests.response),
     );
     const out = await client().targets.listCustomRequests(q);
     customTargetRequestListResponseSchema.parse(out);
-    expect(out).toEqual(targetFixtures.listCustomRequests.response);
+    expect(out).toEqual(targetMockData.listCustomRequests.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: "/targets/request-custom",
@@ -108,14 +108,14 @@ describe("TargetsResource", () => {
 
   it("getCustomRequest — success", async () => {
     const cPath = getCustomTargetRequestInputSchema.parse({
-      ...targetFixtures.getCustomRequest.path,
+      ...targetMockData.getCustomRequest.path,
     });
     fetchMock.mockResolvedValue(
-      jsonResponse(targetFixtures.getCustomRequest.response),
+      jsonResponse(targetMockData.getCustomRequest.response),
     );
     const out = await client().targets.getCustomRequest(cPath);
     customTargetRequestInfoSchema.parse(out);
-    expect(out).toEqual(targetFixtures.getCustomRequest.response);
+    expect(out).toEqual(targetMockData.getCustomRequest.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: `/targets/request-custom/${cPath.request_id}`,
@@ -133,19 +133,19 @@ describe("TargetsResource", () => {
 
   it("requestCustom — success (201)", async () => {
     const body = requestCustomTargetInputSchema.parse({
-      ...targetFixtures.requestCustom.requestBody,
+      ...targetMockData.requestCustom.requestBody,
     });
     fetchMock.mockResolvedValue(
-      jsonResponse(targetFixtures.requestCustom.response, { status: 201 }),
+      jsonResponse(targetMockData.requestCustom.response, { status: 201 }),
     );
     const out = await client().targets.requestCustom(body);
     createCustomTargetResponseSchema.parse(out);
-    expect(out).toEqual(targetFixtures.requestCustom.response);
+    expect(out).toEqual(targetMockData.requestCustom.response);
     assertLastFetch(fetchMock, {
       method: "POST",
       urlIncludes: "/targets/request-custom",
       accept: JSON_ACCEPT,
-      body: targetFixtures.requestCustom.requestBody,
+      body: targetMockData.requestCustom.requestBody,
     });
   });
 

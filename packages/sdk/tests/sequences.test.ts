@@ -10,7 +10,7 @@ import {
 } from "@adaptyv/foundry-shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FoundryClient } from "../src/client.js";
-import { errorBody, sequenceFixtures } from "@adaptyv/foundry-shared/fixtures";
+import { errorBody, sequenceMockData } from "@adaptyv/foundry-shared/mockdata";
 import {
   assertLastFetch,
   installFetchMock,
@@ -33,11 +33,11 @@ describe("SequencesResource", () => {
   const client = () => new FoundryClient({ apiKey: "test-token" });
 
   it("list — success", async () => {
-    const query = listSequencesInputSchema.parse({ ...sequenceFixtures.list.query });
-    fetchMock.mockResolvedValue(jsonResponse(sequenceFixtures.list.response));
+    const query = listSequencesInputSchema.parse({ ...sequenceMockData.list.query });
+    fetchMock.mockResolvedValue(jsonResponse(sequenceMockData.list.response));
     const out = await client().sequences.list(query);
     sequenceListResponseSchema.parse(out);
-    expect(out).toEqual(sequenceFixtures.list.response);
+    expect(out).toEqual(sequenceMockData.list.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: "/sequences",
@@ -55,11 +55,11 @@ describe("SequencesResource", () => {
   });
 
   it("get — success", async () => {
-    const sPath = getSequenceInputSchema.parse({ ...sequenceFixtures.get.path });
-    fetchMock.mockResolvedValue(jsonResponse(sequenceFixtures.get.response));
+    const sPath = getSequenceInputSchema.parse({ ...sequenceMockData.get.path });
+    fetchMock.mockResolvedValue(jsonResponse(sequenceMockData.get.response));
     const out = await client().sequences.get(sPath);
     sequenceInfoSchema.parse(out);
-    expect(out).toEqual(sequenceFixtures.get.response);
+    expect(out).toEqual(sequenceMockData.get.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: `/sequences/${sPath.sequence_id}`,
@@ -77,19 +77,19 @@ describe("SequencesResource", () => {
 
   it("add — success (201)", async () => {
     const body = addSequencesInputSchema.parse({
-      ...sequenceFixtures.add.requestBody,
+      ...sequenceMockData.add.requestBody,
     });
     fetchMock.mockResolvedValue(
-      jsonResponse(sequenceFixtures.add.response, { status: 201 }),
+      jsonResponse(sequenceMockData.add.response, { status: 201 }),
     );
     const out = await client().sequences.add(body);
     sequenceAddResponseSchema.parse(out);
-    expect(out).toEqual(sequenceFixtures.add.response);
+    expect(out).toEqual(sequenceMockData.add.response);
     assertLastFetch(fetchMock, {
       method: "POST",
       urlIncludes: "/sequences",
       accept: JSON_ACCEPT,
-      body: sequenceFixtures.add.requestBody,
+      body: sequenceMockData.add.requestBody,
     });
   });
 
@@ -105,15 +105,15 @@ describe("SequencesResource", () => {
 
   it("listForExperiment — success", async () => {
     const input = listSequencesForExperimentInputSchema.parse({
-      ...sequenceFixtures.listForExperiment.input,
+      ...sequenceMockData.listForExperiment.input,
     });
     const { experiment_id } = input;
     fetchMock.mockResolvedValue(
-      jsonResponse(sequenceFixtures.listForExperiment.response),
+      jsonResponse(sequenceMockData.listForExperiment.response),
     );
     const out = await client().sequences.listForExperiment(input);
     sequenceListResponseSchema.parse(out);
-    expect(out).toEqual(sequenceFixtures.listForExperiment.response);
+    expect(out).toEqual(sequenceMockData.listForExperiment.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: `/experiments/${experiment_id}/sequences`,

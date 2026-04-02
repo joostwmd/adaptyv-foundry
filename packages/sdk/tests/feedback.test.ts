@@ -4,7 +4,7 @@ import {
   submitFeedbackResponseSchema,
 } from "@adaptyv/foundry-shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { errorBody, feedbackFixtures } from "@adaptyv/foundry-shared/fixtures";
+import { errorBody, feedbackMockData } from "@adaptyv/foundry-shared/mockdata";
 import { FoundryClient } from "../src/client.js";
 import {
   assertLastFetch,
@@ -29,19 +29,19 @@ describe("FeedbackResource", () => {
 
   it("submit — success (201)", async () => {
     const body = submitFeedbackInputSchema.parse({
-      ...feedbackFixtures.submit.requestBody,
+      ...feedbackMockData.submit.requestBody,
     });
     fetchMock.mockResolvedValue(
-      jsonResponse(feedbackFixtures.submit.response, { status: 201 }),
+      jsonResponse(feedbackMockData.submit.response, { status: 201 }),
     );
     const out = await client().feedback.submit(body);
     submitFeedbackResponseSchema.parse(out);
-    expect(out).toEqual(feedbackFixtures.submit.response);
+    expect(out).toEqual(feedbackMockData.submit.response);
     assertLastFetch(fetchMock, {
       method: "POST",
       urlIncludes: "/feedback/submit",
       accept: JSON_ACCEPT,
-      body: feedbackFixtures.submit.requestBody,
+      body: feedbackMockData.submit.requestBody,
     });
   });
 

@@ -1,6 +1,6 @@
-import { fixtureIds } from "./common.js";
+import { mockIds } from "./common.js";
 
-export const targetFixtures = {
+export const targetMockData = {
   list: {
     query: {
       search: "EGFR",
@@ -13,27 +13,27 @@ export const targetFixtures = {
     response: {
       items: [
         {
-          id: fixtureIds.targets.egfr,
+          id: mockIds.targets.egfr,
           name: "Human EGFR / ERBB1 Protein, His Tag",
           vendor_name: "ACRO Biosystems",
           catalog_number: "EGR-H5222",
-          url: `https://targets.adaptyvbio.com/protein/${fixtureIds.targets.egfr}`,
+          url: `https://targets.adaptyvbio.com/protein/${mockIds.targets.egfr}`,
           uniprot_id: "P00533",
         },
         {
-          id: fixtureIds.targets.pdl1,
+          id: mockIds.targets.pdl1,
           name: "Human PD-L1 / B7-H1 Protein",
           vendor_name: "ACRO Biosystems",
           catalog_number: "PD1-H5221",
-          url: `https://targets.adaptyvbio.com/protein/${fixtureIds.targets.pdl1}`,
+          url: `https://targets.adaptyvbio.com/protein/${mockIds.targets.pdl1}`,
           uniprot_id: "Q9NZQ7",
         },
         {
-          id: fixtureIds.targets.her2,
+          id: mockIds.targets.her2,
           name: "Human HER2 / ERBB2 Protein, His-Avi Tag",
           vendor_name: "ACRO Biosystems",
           catalog_number: "HE2-H5223",
-          url: `https://targets.adaptyvbio.com/protein/${fixtureIds.targets.her2}`,
+          url: `https://targets.adaptyvbio.com/protein/${mockIds.targets.her2}`,
           uniprot_id: "P04626",
         },
       ],
@@ -43,13 +43,13 @@ export const targetFixtures = {
     },
   },
   get: {
-    path: { target_id: fixtureIds.targets.pdl1 },
+    path: { target_id: mockIds.targets.pdl1 },
     response: {
-      id: fixtureIds.targets.pdl1,
+      id: mockIds.targets.pdl1,
       name: "Human PD-L1 / B7-H1 Protein",
       vendor_name: "ACRO Biosystems",
       catalog_number: "PD1-H5221",
-      url: `https://targets.adaptyvbio.com/protein/${fixtureIds.targets.pdl1}`,
+      url: `https://targets.adaptyvbio.com/protein/${mockIds.targets.pdl1}`,
       uniprot_id: "Q9NZQ7",
       details: {
         species: "Human",

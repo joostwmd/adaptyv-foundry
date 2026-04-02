@@ -8,7 +8,7 @@ import {
 } from "@adaptyv/foundry-shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FoundryClient } from "../src/client.js";
-import { errorBody, resultFixtures } from "@adaptyv/foundry-shared/fixtures";
+import { errorBody, resultMockData } from "@adaptyv/foundry-shared/mockdata";
 import {
   assertLastFetch,
   installFetchMock,
@@ -31,11 +31,11 @@ describe("ResultsResource", () => {
   const client = () => new FoundryClient({ apiKey: "test-token" });
 
   it("list — success", async () => {
-    const query = listResultsInputSchema.parse({ ...resultFixtures.list.query });
-    fetchMock.mockResolvedValue(jsonResponse(resultFixtures.list.response));
+    const query = listResultsInputSchema.parse({ ...resultMockData.list.query });
+    fetchMock.mockResolvedValue(jsonResponse(resultMockData.list.response));
     const out = await client().results.list(query);
     resultListResponseSchema.parse(out);
-    expect(out).toEqual(resultFixtures.list.response);
+    expect(out).toEqual(resultMockData.list.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: "/results",
@@ -53,11 +53,11 @@ describe("ResultsResource", () => {
   });
 
   it("get — success", async () => {
-    const rPath = getResultInputSchema.parse({ ...resultFixtures.get.path });
-    fetchMock.mockResolvedValue(jsonResponse(resultFixtures.get.response));
+    const rPath = getResultInputSchema.parse({ ...resultMockData.get.path });
+    fetchMock.mockResolvedValue(jsonResponse(resultMockData.get.response));
     const out = await client().results.get(rPath);
     resultInfoSchema.parse(out);
-    expect(out).toEqual(resultFixtures.get.response);
+    expect(out).toEqual(resultMockData.get.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: `/results/${rPath.result_id}`,
@@ -75,15 +75,15 @@ describe("ResultsResource", () => {
 
   it("listForExperiment — success", async () => {
     const input = listResultsForExperimentInputSchema.parse({
-      ...resultFixtures.listForExperiment.input,
+      ...resultMockData.listForExperiment.input,
     });
     const { experiment_id } = input;
     fetchMock.mockResolvedValue(
-      jsonResponse(resultFixtures.listForExperiment.response),
+      jsonResponse(resultMockData.listForExperiment.response),
     );
     const out = await client().results.listForExperiment(input);
     resultListResponseSchema.parse(out);
-    expect(out).toEqual(resultFixtures.listForExperiment.response);
+    expect(out).toEqual(resultMockData.listForExperiment.response);
     assertLastFetch(fetchMock, {
       method: "GET",
       urlIncludes: `/experiments/${experiment_id}/results`,

@@ -1,4 +1,4 @@
-import { quoteFixtures } from "@adaptyv/foundry-shared/fixtures";
+import { quoteMockData } from "@adaptyv/foundry-shared/mockdata";
 import { FoundryApiError } from "@adaptyv/foundry-sdk";
 import { describe, expect, it } from "vitest";
 import { createMockClient, withMcpSession } from "./test-utils.js";
@@ -6,11 +6,11 @@ import { createMockClient, withMcpSession } from "./test-utils.js";
 describe("MCP tools — quotes", () => {
   it("list_quotes — success", async () => {
     const mock = createMockClient();
-    mock.quotes.list.mockResolvedValue(quoteFixtures.list.response);
+    mock.quotes.list.mockResolvedValue(quoteMockData.list.response);
     await withMcpSession(mock, async (c) => {
       const out = await c.callTool({
         name: "list_quotes",
-        arguments: { ...quoteFixtures.list.query },
+        arguments: { ...quoteMockData.list.query },
       });
       expect(out.content[0].text).toContain("Q-2026-0001");
     });
@@ -18,33 +18,33 @@ describe("MCP tools — quotes", () => {
 
   it("get_quote — success", async () => {
     const mock = createMockClient();
-    mock.quotes.get.mockResolvedValue(quoteFixtures.get.response);
+    mock.quotes.get.mockResolvedValue(quoteMockData.get.response);
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "get_quote",
-        arguments: { ...quoteFixtures.get.path },
+        arguments: { ...quoteMockData.get.path },
       });
     });
   });
 
   it("confirm_quote — success", async () => {
     const mock = createMockClient();
-    mock.quotes.confirm.mockResolvedValue(quoteFixtures.confirm.response);
+    mock.quotes.confirm.mockResolvedValue(quoteMockData.confirm.response);
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "confirm_quote",
-        arguments: { ...quoteFixtures.confirm.input },
+        arguments: { ...quoteMockData.confirm.input },
       });
     });
   });
 
   it("reject_quote — success", async () => {
     const mock = createMockClient();
-    mock.quotes.reject.mockResolvedValue(quoteFixtures.reject.response);
+    mock.quotes.reject.mockResolvedValue(quoteMockData.reject.response);
     await withMcpSession(mock, async (c) => {
       await c.callTool({
         name: "reject_quote",
-        arguments: { ...quoteFixtures.reject.input },
+        arguments: { ...quoteMockData.reject.input },
       });
     });
   });

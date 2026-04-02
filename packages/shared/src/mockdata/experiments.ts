@@ -1,11 +1,11 @@
-import { fixtureIds } from "./common.js";
+import { mockIds } from "./common.js";
 
-const exp1 = fixtureIds.experiments.draftScreening;
-const exp2 = fixtureIds.experiments.waitingQuote;
-const exp3 = fixtureIds.experiments.inProductionAffinity;
-const exp4 = fixtureIds.experiments.doneThermostability;
+const exp1 = mockIds.experiments.draftScreening;
+const exp2 = mockIds.experiments.waitingQuote;
+const exp3 = mockIds.experiments.inProductionAffinity;
+const exp4 = mockIds.experiments.doneThermostability;
 
-export const experimentFixtures = {
+export const experimentMockData = {
   list: {
     query: {
       limit: 50,
@@ -77,7 +77,7 @@ export const experimentFixtures = {
       experiment_spec: {
         experiment_type: "screening" as const,
         method: "bli" as const,
-        target_id: fixtureIds.targets.her2,
+        target_id: mockIds.targets.her2,
         sequences: {
           mAb1:
             "EVQLVESGGGLVQPGGSLRLSCAASGFTFSSYAMSWVRQAPGKGLEWVSAISGSGGSTYYADSVKGRFTISRDNSKNTLYLQMNSLRAEDTAVYYCARRDYFDYWGQGTLVTVSS",
@@ -106,7 +106,7 @@ export const experimentFixtures = {
       experiment_spec: {
         experiment_type: "screening" as const,
         method: "bli" as const,
-        target_id: fixtureIds.targets.her2,
+        target_id: mockIds.targets.her2,
         sequences: {
           mAb1:
             "EVQLVESGGGLVQPGGSLRLSCAASGFTFSSYAMSWVRQAPGKGLEWVSAISGSGGSTYYADSVKGRFTISRDNSKNTLYLQMNSLRAEDTAVYYCARRDYFDYWGQGTLVTVSS",
@@ -159,7 +159,7 @@ export const experimentFixtures = {
       experiment_spec: {
         experiment_type: "screening" as const,
         method: "bli" as const,
-        target_id: fixtureIds.targets.her2,
+        target_id: mockIds.targets.her2,
         sequences: {
           seq1:
             "EVQLVESGGGLVQPGGSLRLSCAASGFTFSSYAMSWVRQAPGKGLEWVSAISGSGGSTYYADSVKGRFTISRDNSKNTLYLQMNSLRAEDTAVYYCARRDYFDYWGQGTLVTVSS",

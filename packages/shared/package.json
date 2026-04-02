@@ -9,14 +9,14 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./fixtures": {
-      "types": "./dist/fixtures/index.d.ts",
-      "import": "./dist/fixtures/index.js"
+    "./mockdata": {
+      "types": "./dist/mockdata/index.d.ts",
+      "import": "./dist/mockdata/index.js"
     }
   },
   "files": ["dist"],
   "scripts": {
-    "build": "tsup src/index.ts src/fixtures/index.ts --format esm --dts --clean --external zod"
+    "build": "tsup src/index.ts src/mockdata/index.ts --format esm --dts --clean --external zod"
   },
   "dependencies": {
     "zod": "^3.24.1"
