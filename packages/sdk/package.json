@@ -8,13 +8,17 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./mock": {
+      "types": "./dist/mock-foundry-client.d.ts",
+      "import": "./dist/mock-foundry-client.js"
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --clean --external @adaptyv/foundry-shared",
+    "build": "tsup src/index.ts src/mock-foundry-client.ts --format esm --dts --clean --external @adaptyv/foundry-shared",
     "test": "vitest run",
     "test:watch": "vitest",
     "mutate": "stryker run",
