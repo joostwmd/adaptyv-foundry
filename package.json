@@ -3,6 +3,7 @@
   "private": true,
   "packageManager": "pnpm@9.15.0",
   "scripts": {
+    "notify:webhook:test": "pnpm -C packages/notify webhook:test",
     "build": "pnpm -r run build",
     "test": "pnpm --filter @adaptyv/foundry-sdk test",
     "test:mcp": "pnpm --filter adaptyv-foundry-mcp test",
