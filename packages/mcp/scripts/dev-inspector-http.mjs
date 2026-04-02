@@ -7,6 +7,7 @@ import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import process from "node:process";
+import { applyLocalHttpServerDefaults } from "./local-dev-defaults.mjs";
 
 const pkgRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = process.env.HOST ?? "127.0.0.1";
@@ -32,14 +33,8 @@ async function waitForHealth() {
   throw new Error(`Timed out waiting for ${healthUrl}`);
 }
 
-const serverEnv = {
-  ...process.env,
-  MODE: "http",
-};
-if (
-  serverEnv.FOUNDRY_USE_MOCK === undefined &&
-  !String(serverEnv.FOUNDRY_API_TOKEN ?? "").trim()
-) {
+const serverEnv = applyLocalHttpServerDefaults(process.env);
+if (serverEnv.FOUNDRY_USE_MOCK === undefined) {
   serverEnv.FOUNDRY_USE_MOCK = "1";
 }
 
@@ -83,12 +78,9 @@ const inspArgs = [
   "http",
   "--server-url",
   mcpUrl,
+  "--header",
+  `Authorization: Bearer ${serverEnv.MCP_HTTP_API_KEY}`,
 ];
-
-const apiKey = process.env.MCP_HTTP_API_KEY?.trim();
-if (apiKey) {
-  inspArgs.push("--header", `Authorization: Bearer ${apiKey}`);
-}
 
 const inspector = spawn("npx", inspArgs, {
   cwd: pkgRoot,

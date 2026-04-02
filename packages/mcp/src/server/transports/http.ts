@@ -23,20 +23,25 @@ function parseAllowedOrigins(raw: string | undefined): Set<string> {
 }
 
 export async function startHttp(): Promise<void> {
+  const mcpHttpKey = process.env.MCP_HTTP_API_KEY?.trim();
+  if (!mcpHttpKey) {
+    throw new Error(
+      "MCP_HTTP_API_KEY is required when MODE=http. Clients must send Authorization: Bearer <same value>.",
+    );
+  }
+
   const port = Number(process.env.PORT ?? "3333");
   const host = process.env.HOST ?? "127.0.0.1";
   const allowedOrigins = parseAllowedOrigins(process.env.ALLOWED_ORIGINS);
 
   if (useMockFromEnv()) {
     console.error(
-      "[adaptyv-foundry-mcp] FOUNDRY_USE_MOCK: using in-memory mock client (no HTTP).",
+      "[adaptyv-foundry-mcp] FOUNDRY_USE_MOCK: using in-memory mock client (no Foundry HTTP).",
     );
   }
-  if (process.env.MCP_HTTP_API_KEY?.trim()) {
-    console.error(
-      "[adaptyv-foundry-mcp] MCP_HTTP_API_KEY: Bearer auth required on /mcp.",
-    );
-  }
+  console.error(
+    "[adaptyv-foundry-mcp] MCP_HTTP_API_KEY: Bearer auth required on /mcp.",
+  );
   const foundryClient = createFoundryClientForMcp();
 
   const app = new Hono<{ Variables: HttpGatewayVariables }>();

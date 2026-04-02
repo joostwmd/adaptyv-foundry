@@ -4,31 +4,47 @@ MCP server for the Adaptyv Foundry API (stdio or Streamable HTTP).
 
 ## Environment variables
 
-See [`.env.example`](./.env.example). Quick reference:
+See [`.env.example`](./.env.example).
 
-| Variable | When it matters |
-|----------|-----------------|
-| `FOUNDRY_USE_MOCK` | `1` / `true` → in-memory mock client (good for local testing). |
-| `FOUNDRY_API_TOKEN` | Required when mock is off (real Foundry API). |
-| `MODE` | Set to `http` to run the Hono gateway instead of stdio. |
-| `PORT` / `HOST` | HTTP listen address (default `3333` / `127.0.0.1`). |
-| `MCP_HTTP_API_KEY` | If set, `/mcp` requires `Authorization: Bearer …` (Inspector: use the same header). |
-| `ALLOWED_ORIGINS` | Optional comma-separated `Origin` allowlist for browser clients. |
+| Variable | Required | Role |
+|----------|----------|------|
+| `FOUNDRY_API_TOKEN` | **Always** | Must be set in every environment. **Mock mode** does not send it to Foundry; **live mode** uses it as the API bearer token. Same contract as production. |
+| `FOUNDRY_USE_MOCK` | No | `1` / `true` → in-memory mock client instead of HTTP to Foundry. |
+| `MODE` | No | `http` → Streamable HTTP gateway; otherwise stdio. |
+| `MCP_HTTP_API_KEY` | **When `MODE=http`** | Clients must send `Authorization: Bearer <same value>` on `/mcp`. `/health` stays open. |
+| `PORT` / `HOST` | No | HTTP listen address (defaults `3333` / `127.0.0.1`). |
+| `ALLOWED_ORIGINS` | No | Comma-separated `Origin` allowlist for browsers. |
 
-You do not need a `.env` file if you export variables in the shell or prefix commands (e.g. `FOUNDRY_USE_MOCK=1 pnpm run …`).
+### Local dev scripts (placeholders)
+
+`pnpm start`, `pnpm run start:http`, `pnpm run inspector:http`, and `inspector:stdio` fill **development-only** defaults when variables are unset (see `scripts/local-dev-defaults.mjs`):
+
+- `FOUNDRY_API_TOKEN` → `local-dev-foundry-token`
+- `MCP_HTTP_API_KEY` → `local-dev-mcp-http-key` (HTTP only)
+
+**Production** and **`node dist/index.js`** must set real values — the app throws on startup if `FOUNDRY_API_TOKEN` is missing, or if `MODE=http` and `MCP_HTTP_API_KEY` is missing.
+
+### Two auth layers (HTTP)
+
+1. **MCP HTTP** — Wrong or missing `Authorization: Bearer` on `/mcp` → **401** `{"error":"unauthorized"}`.
+2. **Foundry** — After MCP auth succeeds, live mode calls Foundry with `FOUNDRY_API_TOKEN`; failures become **tool errors**. Mock mode never calls Foundry.
+
+**Test MCP 401:** `curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:3333/mcp` (no Bearer).
+
+**Test Foundry errors:** valid MCP Bearer + `FOUNDRY_USE_MOCK=0` + invalid `FOUNDRY_API_TOKEN`.
 
 ## How to test with MCP Inspector
 
-### Stdio (Inspector spawns the server)
+### Stdio
 
-Mock Foundry data:
+Mock (script passes `FOUNDRY_API_TOKEN=local-dev-foundry-token`):
 
 ```bash
 cd packages/mcp
 pnpm run inspector:stdio
 ```
 
-Live Foundry API (token required):
+Live API:
 
 ```bash
 cd packages/mcp
@@ -36,34 +52,39 @@ export FOUNDRY_API_TOKEN="your-token"
 pnpm run inspector:stdio:live
 ```
 
-`pnpm run inspector` is an alias for `inspector:stdio` (mock).
+`pnpm run inspector` is an alias for `inspector:stdio`.
 
-### HTTP (Streamable HTTP)
+### HTTP
 
-**Option A — one command (server + Inspector):** mock is enabled only if your shell already has `FOUNDRY_USE_MOCK=1` (or add it):
+**One command (server + Inspector):** defaults mock + both placeholder secrets if unset:
 
 ```bash
 cd packages/mcp
-FOUNDRY_USE_MOCK=1 pnpm run inspector:http
+pnpm run inspector:http
 ```
 
-If `MCP_HTTP_API_KEY` is set in the environment, the script passes `Authorization: Bearer …` to Inspector automatically.
-
-**Option B — two terminals:** run the server, then connect the UI.
+**Two terminals** (uses same dev placeholders as `start:http` when env is empty):
 
 ```bash
 # Terminal 1
 cd packages/mcp
-FOUNDRY_USE_MOCK=1 pnpm run start:http
+pnpm run start:http
 ```
 
 ```bash
 # Terminal 2
 cd packages/mcp
-FOUNDRY_USE_MOCK=1 pnpm run inspector:http:connect
+pnpm run inspector:http:connect
 ```
 
-Use the same `MCP_HTTP_API_KEY` (if any) in both terminals.
+Override any value via the environment, e.g. real Foundry + real MCP secret:
+
+```bash
+export FOUNDRY_USE_MOCK=0
+export FOUNDRY_API_TOKEN="real-foundry-token"
+export MCP_HTTP_API_KEY="real-mcp-secret"
+pnpm run inspector:http
+```
 
 **Health check:** `curl -s http://127.0.0.1:3333/health`
 
