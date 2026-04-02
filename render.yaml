@@ -1,0 +1,25 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Deploy: connect repo in Render dashboard or use one-click with your GitHub org/repo.
+# Set FOUNDRY_API_TOKEN and MCP_HTTP_API_KEY in the service Environment (sync: false = dashboard-only).
+
+services:
+  - type: web
+    name: adaptyv-foundry-mcp
+    runtime: docker
+    region: oregon
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MODE
+        value: http
+      - key: HOST
+        value: 0.0.0.0
+      - key: FOUNDRY_USE_MOCK
+        value: "0"
+      - key: FOUNDRY_API_TOKEN
+        sync: false
+      - key: MCP_HTTP_API_KEY
+        sync: false

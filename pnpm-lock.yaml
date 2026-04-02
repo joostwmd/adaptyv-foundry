@@ -57,6 +57,9 @@ importers:
       '@stryker-mutator/vitest-runner':
         specifier: ^9.0.0
         version: 9.6.0(@stryker-mutator/core@9.6.0(@types/node@22.19.15))(vitest@3.2.4(@types/node@22.19.15)(tsx@4.21.0))
+      '@types/node':
+        specifier: ^22.19.15
+        version: 22.19.15
       stryker-reporter-llm:
         specifier: ^0.1.0
         version: 0.1.0(@stryker-mutator/api@9.6.0)

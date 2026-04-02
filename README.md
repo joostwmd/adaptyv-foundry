@@ -5,6 +5,7 @@ Monorepo: TypeScript SDK for the Adaptyv Foundry API and an MCP server.
 - **MCP testing (Inspector, env vars, HTTP vs stdio):** [packages/mcp/README.md](packages/mcp/README.md). **Cursor over HTTP:** use the JSON example under *Cursor chat (Streamable HTTP)* in that README — merge into `.cursor/mcp.json` or `~/.cursor/mcp.json` and match `MCP_HTTP_API_KEY` in the Bearer.
 - **Mock MCP / Inspector (stdio):** `cd packages/mcp && pnpm run inspector` (passes `FOUNDRY_USE_MOCK=1` and a dev `FOUNDRY_API_TOKEN` placeholder; see MCP README).
 - **HTTP + Inspector in one go:** `cd packages/mcp && pnpm run inspector:http` (starts server, then Inspector on `http://127.0.0.1:3333/mcp`).
+- **Docker image + Inspector (mock defaults):** `pnpm docker:inspector` from repo root (requires Docker). Builds `foundry-mcp`, runs the container on port **8080** by default, opens MCP Inspector with the correct Bearer header. Use `pnpm docker:inspector -- --no-build` to skip rebuild.
 - **Live API MCP (stdio):** `FOUNDRY_API_TOKEN=… pnpm run inspector:api` in `packages/mcp` (alias for `inspector:stdio:live`).
 - **Stdio MCP with mock:** `pnpm mcp:mock` from repo root (sets dev `FOUNDRY_API_TOKEN` + mock).
 - **Stdio MCP live:** `pnpm mcp` requires `FOUNDRY_API_TOKEN` in the environment (no placeholder).
@@ -25,3 +26,21 @@ Responses from `/health` and `/mcp` include `X-Request-Id`. Clients may send `X-
 Local example: `cd packages/mcp && pnpm run inspector:http`, or run `pnpm run start:http` and in another terminal `pnpm run inspector:http:connect`.
 
 See `packages/mcp/.env.example` and [packages/mcp/README.md](packages/mcp/README.md) for variables and testing steps.
+
+## Deploy (Docker, Fly.io, Render)
+
+The repo root [Dockerfile](Dockerfile) builds the MCP server for **Streamable HTTP** (`MODE=http`, `HOST=0.0.0.0`, default `PORT=8080`). After deploy, the MCP endpoint is `https://<your-host>/mcp` with header `Authorization: Bearer <MCP_HTTP_API_KEY>`.
+
+**Required in production:** `FOUNDRY_API_TOKEN`, `MCP_HTTP_API_KEY`. Optional: `FOUNDRY_USE_MOCK`, `FOUNDRY_API_BASE_URL`, `ALLOWED_ORIGINS`. Platforms set `PORT` automatically when you listen on the port they expect (8080 in [fly.toml](fly.toml)).
+
+**Local smoke (no Inspector):**
+
+```bash
+docker build -t foundry-mcp .
+docker run --rm -e PORT=8080 -e MCP_HTTP_API_KEY=test -e FOUNDRY_API_TOKEN=test -e FOUNDRY_USE_MOCK=1 -p 8080:8080 foundry-mcp
+curl -s http://127.0.0.1:8080/health
+```
+
+**Fly.io:** [fly.toml](fly.toml) — run `fly launch` / `fly deploy`, then `fly secrets set FOUNDRY_API_TOKEN=... MCP_HTTP_API_KEY=...`. One-click (public GitHub repo): [Deploy to Fly.io](https://fly.io/launch?repo=https://github.com/YOUR_ORG/adaptyv-foundry) (replace `YOUR_ORG`).
+
+**Render:** [render.yaml](render.yaml) Blueprint — connect the repo in the Render dashboard and set `FOUNDRY_API_TOKEN` and `MCP_HTTP_API_KEY` in the service environment. One-click: [Deploy to Render](https://render.com/deploy?repo=https://github.com/YOUR_ORG/adaptyv-foundry) (replace `YOUR_ORG`).

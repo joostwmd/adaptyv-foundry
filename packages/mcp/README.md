@@ -93,6 +93,10 @@ cd packages/mcp
 pnpm run inspector:http:connect
 ```
 
+### Docker (production image + Inspector)
+
+From the **monorepo root**, with Docker installed: `pnpm docker:inspector` builds the image (`foundry-mcp`), runs a container named `foundry-mcp-dev` on **port 8080** (override with `PORT=...`), waits for `/health`, then starts MCP Inspector with `Authorization: Bearer` matching `MCP_HTTP_API_KEY` (dev placeholders apply when unset, same as `start:http`). Skip rebuild: `pnpm docker:inspector -- --no-build`. Image tag override: `DOCKER_IMAGE=my-tag pnpm docker:inspector`.
+
 Override any value via the environment, e.g. real Foundry + real MCP secret:
 
 ```bash

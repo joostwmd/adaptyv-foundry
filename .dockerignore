@@ -1,0 +1,16 @@
+node_modules
+**/node_modules
+.git
+.github
+.cursor
+**/.env
+**/.env.*
+!.env.example
+**/dist
+coverage
+**/*.log
+.DS_Store
+packages/mcp/tests
+packages/sdk/tests
+packages/sdk/stryker.config.mjs
+**/.stryker-tmp

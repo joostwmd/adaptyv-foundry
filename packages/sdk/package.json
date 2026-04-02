@@ -30,6 +30,7 @@
   "devDependencies": {
     "@stryker-mutator/core": "^9.0.0",
     "@stryker-mutator/vitest-runner": "^9.0.0",
+    "@types/node": "^22.19.15",
     "stryker-reporter-llm": "^0.1.0",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2",

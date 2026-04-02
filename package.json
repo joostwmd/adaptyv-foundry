@@ -8,6 +8,7 @@
     "test:mcp": "pnpm --filter adaptyv-foundry-mcp test",
     "mutate": "pnpm --filter @adaptyv/foundry-sdk mutate",
     "mcp": "pnpm --filter adaptyv-foundry-mcp exec tsx src/index.ts",
-    "mcp:mock": "pnpm --filter adaptyv-foundry-mcp exec env FOUNDRY_USE_MOCK=1 FOUNDRY_API_TOKEN=local-dev-foundry-token tsx src/index.ts"
+    "mcp:mock": "pnpm --filter adaptyv-foundry-mcp exec env FOUNDRY_USE_MOCK=1 FOUNDRY_API_TOKEN=local-dev-foundry-token tsx src/index.ts",
+    "docker:inspector": "node packages/mcp/scripts/docker-inspector.mjs"
   }
 }
