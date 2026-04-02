@@ -17,7 +17,7 @@ function parseAllowedOrigins(raw: string | undefined): Set<string> {
 }
 
 export async function startHttp(): Promise<void> {
-  const port = Number(process.env.PORT ?? "8787");
+  const port = Number(process.env.PORT ?? "3333");
   const host = process.env.HOST ?? "127.0.0.1";
   const allowedOrigins = parseAllowedOrigins(process.env.ALLOWED_ORIGINS);
 
