@@ -2,7 +2,7 @@
 
 Monorepo: TypeScript SDK for the Adaptyv Foundry API and an MCP server.
 
-- **MCP testing (Inspector, env vars, HTTP vs stdio):** [packages/mcp/README.md](packages/mcp/README.md).
+- **MCP testing (Inspector, env vars, HTTP vs stdio):** [packages/mcp/README.md](packages/mcp/README.md). **Cursor over HTTP:** merge [packages/mcp/cursor-mcp-http.example.json](packages/mcp/cursor-mcp-http.example.json) into `.cursor/mcp.json` or `~/.cursor/mcp.json` and match `MCP_HTTP_API_KEY` in the Bearer.
 - **Mock MCP / Inspector (stdio):** `cd packages/mcp && pnpm run inspector` (passes `FOUNDRY_USE_MOCK=1` and a dev `FOUNDRY_API_TOKEN` placeholder; see MCP README).
 - **HTTP + Inspector in one go:** `cd packages/mcp && pnpm run inspector:http` (starts server, then Inspector on `http://127.0.0.1:3333/mcp`).
 - **Live API MCP (stdio):** `FOUNDRY_API_TOKEN=… pnpm run inspector:api` in `packages/mcp` (alias for `inspector:stdio:live`).
