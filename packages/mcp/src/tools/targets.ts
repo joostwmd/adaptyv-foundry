@@ -22,7 +22,7 @@ export function registerTargetTools(server: McpServer, client: FoundryClient): v
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.targets.list(args), {
+      handleToolCall(server, "list_targets", () => client.targets.list(args), {
         hint: "Try another search term, relax filters, or adjust limit/offset.",
       }),
   );
@@ -36,7 +36,7 @@ export function registerTargetTools(server: McpServer, client: FoundryClient): v
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.targets.get(args), {
+      handleToolCall(server, "get_target", () => client.targets.get(args), {
         hint: "Verify `target_id` via `list_targets` — IDs are UUIDs.",
       }),
   );
@@ -50,7 +50,7 @@ export function registerTargetTools(server: McpServer, client: FoundryClient): v
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.targets.listCustomRequests(args), {
+      handleToolCall(server, "list_custom_target_requests", () => client.targets.listCustomRequests(args), {
         hint: "Use pagination or check permissions if the list is empty.",
       }),
   );
@@ -64,7 +64,7 @@ export function registerTargetTools(server: McpServer, client: FoundryClient): v
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.targets.getCustomRequest(args), {
+      handleToolCall(server, "get_custom_target_request", () => client.targets.getCustomRequest(args), {
         hint: "Confirm `request_id` from `list_custom_target_requests`.",
       }),
   );
@@ -78,7 +78,7 @@ export function registerTargetTools(server: McpServer, client: FoundryClient): v
       annotations: openWorld,
     },
     async (args) =>
-      handleToolCall(server, () => client.targets.requestCustom(args), {
+      handleToolCall(server, "request_custom_target", () => client.targets.requestCustom(args), {
         hint: "Ensure required fields (name, product_id, sequence) are valid per API validation errors.",
       }),
   );

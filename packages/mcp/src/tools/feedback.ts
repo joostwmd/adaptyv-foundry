@@ -18,7 +18,7 @@ export function registerFeedbackTools(
       annotations: openWorld,
     },
     async (args) =>
-      handleToolCall(server, () => client.feedback.submit(args), {
+      handleToolCall(server, "submit_feedback", () => client.feedback.submit(args), {
         hint: "Include `request_uuid` and structured `json_body` when reporting API failures.",
       }),
   );

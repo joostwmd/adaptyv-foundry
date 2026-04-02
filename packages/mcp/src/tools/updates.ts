@@ -18,7 +18,7 @@ export function registerUpdateTools(server: McpServer, client: FoundryClient): v
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.updates.list(args), {
+      handleToolCall(server, "list_updates", () => client.updates.list(args), {
         hint: "Adjust limit/offset; scope to one experiment via `list_experiment_updates`.",
       }),
   );
@@ -32,7 +32,7 @@ export function registerUpdateTools(server: McpServer, client: FoundryClient): v
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.updates.listForExperiment(args), {
+      handleToolCall(server, "list_experiment_updates", () => client.updates.listForExperiment(args), {
         hint: "Confirm `experiment_id` from `list_experiments`.",
       }),
   );

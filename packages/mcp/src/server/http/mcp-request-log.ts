@@ -1,4 +1,5 @@
 import type { JSONRPCMessage, MessageExtraInfo } from "@modelcontextprotocol/sdk/types.js";
+import { getMcpLastInvokedTool } from "./request-context.js";
 
 const LOG_PREFIX = "[adaptyv-foundry-mcp]";
 
@@ -118,6 +119,7 @@ export function logMcpHttpExchangeEnd(
   startedAtMs: number,
   res: Response,
 ): void {
+  const tool = getMcpLastInvokedTool();
   console.log(
     safeJsonLine({
       event: "mcp_http_request_complete",
@@ -126,6 +128,7 @@ export function logMcpHttpExchangeEnd(
       httpStatus: res.status,
       durationMs: Math.round(performance.now() - startedAtMs),
       responseContentType: res.headers.get("content-type") ?? undefined,
+      ...(tool ? { tool } : {}),
     }),
   );
 }

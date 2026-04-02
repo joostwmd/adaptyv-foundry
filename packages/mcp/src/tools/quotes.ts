@@ -21,7 +21,7 @@ export function registerQuoteTools(server: McpServer, client: FoundryClient): vo
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.quotes.list(args), {
+      handleToolCall(server, "list_quotes", () => client.quotes.list(args), {
         hint: "Try pagination; quotes may be empty if none were issued.",
       }),
   );
@@ -35,7 +35,7 @@ export function registerQuoteTools(server: McpServer, client: FoundryClient): vo
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.quotes.get(args), {
+      handleToolCall(server, "get_quote", () => client.quotes.get(args), {
         hint: "Use `list_quotes` to discover `quote_id` values.",
       }),
   );
@@ -49,7 +49,7 @@ export function registerQuoteTools(server: McpServer, client: FoundryClient): vo
       annotations: openWorld,
     },
     async (args) =>
-      handleToolCall(server, () => client.quotes.confirm(args), {
+      handleToolCall(server, "confirm_quote", () => client.quotes.confirm(args), {
         hint: "Quote must be `open`; use `get_quote` to verify status.",
       }),
   );
@@ -63,7 +63,7 @@ export function registerQuoteTools(server: McpServer, client: FoundryClient): vo
       annotations: openWorld,
     },
     async (args) =>
-      handleToolCall(server, () => client.quotes.reject(args), {
+      handleToolCall(server, "reject_quote", () => client.quotes.reject(args), {
         hint: "Only open quotes can typically be rejected.",
       }),
   );

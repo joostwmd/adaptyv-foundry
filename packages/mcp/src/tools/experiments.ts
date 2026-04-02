@@ -28,7 +28,7 @@ export function registerExperimentTools(
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.experiments.list(args), {
+      handleToolCall(server, "list_experiments", () => client.experiments.list(args), {
         hint: "Broaden search/filter or use pagination (limit/offset).",
       }),
   );
@@ -42,7 +42,7 @@ export function registerExperimentTools(
       annotations: openWorld,
     },
     async (args) =>
-      handleToolCall(server, () => client.experiments.create(args), {
+      handleToolCall(server, "create_experiment", () => client.experiments.create(args), {
         hint: "Validate `experiment_spec` against experiment type; resolve `target_id` via `list_targets` if needed.",
       }),
   );
@@ -56,7 +56,7 @@ export function registerExperimentTools(
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.experiments.get(args), {
+      handleToolCall(server, "get_experiment", () => client.experiments.get(args), {
         hint: "Obtain `experiment_id` from `list_experiments`.",
       }),
   );
@@ -70,7 +70,7 @@ export function registerExperimentTools(
       annotations: openWorld,
     },
     async (args) =>
-      handleToolCall(server, () => client.experiments.update(args), {
+      handleToolCall(server, "update_experiment", () => client.experiments.update(args), {
         hint: "Draft experiments can usually be edited; check status if update is rejected.",
       }),
   );
@@ -84,7 +84,7 @@ export function registerExperimentTools(
       annotations: openWorld,
     },
     async (args) =>
-      handleToolCall(server, () => client.experiments.submit(args), {
+      handleToolCall(server, "submit_experiment", () => client.experiments.submit(args), {
         hint: "Ensure experiment is in `draft` and required fields are complete.",
       }),
   );
@@ -98,7 +98,7 @@ export function registerExperimentTools(
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.experiments.estimateCost(args), {
+      handleToolCall(server, "estimate_cost", () => client.experiments.estimateCost(args), {
         hint: "Align `experiment_spec` with supported experiment types and methods (e.g. BLI/SPR).",
       }),
   );
@@ -112,7 +112,7 @@ export function registerExperimentTools(
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.experiments.getInvoice(args), {
+      handleToolCall(server, "get_experiment_invoice", () => client.experiments.getInvoice(args), {
         hint: "Invoice may not exist until after quote confirmation — check experiment status.",
       }),
   );
@@ -126,7 +126,7 @@ export function registerExperimentTools(
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.experiments.getQuote(args), {
+      handleToolCall(server, "get_experiment_quote", () => client.experiments.getQuote(args), {
         hint: "Quote appears after workflow steps that generate pricing — list experiments for `stripe_quote_url` hints.",
       }),
   );
@@ -140,7 +140,7 @@ export function registerExperimentTools(
       annotations: openWorld,
     },
     async (args) =>
-      handleToolCall(server, () => client.experiments.confirmQuote(args), {
+      handleToolCall(server, "confirm_experiment_quote", () => client.experiments.confirmQuote(args), {
         hint: "Confirm quote is still `open` and experiment is in the right status.",
       }),
   );
@@ -156,6 +156,7 @@ export function registerExperimentTools(
     async (args) =>
       handleToolCall(
         server,
+        "get_experiment_quote_pdf",
         () => client.experiments.getQuotePdf(args),
         {
           binary: true,

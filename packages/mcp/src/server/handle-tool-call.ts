@@ -1,13 +1,15 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { FoundryApiError } from "@adaptyv/foundry-sdk";
-import { getMcpRequestId } from "./http/request-context.js";
+import { getMcpRequestId, recordMcpToolInvocation } from "./http/request-context.js";
 
 export async function handleToolCall<T>(
   server: McpServer,
+  toolName: string,
   fn: () => Promise<T>,
   options?: { hint?: string; binary?: boolean },
 ): Promise<CallToolResult> {
+  recordMcpToolInvocation(toolName);
   try {
     const result = await fn();
     if (options?.binary && result instanceof ArrayBuffer) {
@@ -27,8 +29,8 @@ export async function handleToolCall<T>(
   } catch (err) {
     const requestId = getMcpRequestId();
     const logPrefix = requestId
-      ? `[adaptyv-foundry-mcp] requestId=${requestId}`
-      : "[adaptyv-foundry-mcp]";
+      ? `[adaptyv-foundry-mcp] requestId=${requestId} tool=${toolName}`
+      : `[adaptyv-foundry-mcp] tool=${toolName}`;
     if (err instanceof FoundryApiError) {
       const msg =
         typeof err.body === "object" &&
@@ -44,6 +46,7 @@ export async function handleToolCall<T>(
           level: "warning",
           data: {
             kind: "FoundryApiError",
+            tool: toolName,
             status: err.status,
             body: err.body,
             ...(requestId ? { requestId } : {}),
@@ -63,6 +66,7 @@ export async function handleToolCall<T>(
         level: "error",
         data: {
           kind: "unexpected",
+          tool: toolName,
           message: String(err),
           ...(requestId ? { requestId } : {}),
         },

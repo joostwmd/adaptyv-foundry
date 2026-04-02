@@ -12,7 +12,7 @@ function mockServer(): McpServer {
 describe("handleToolCall", () => {
   it("serializes successful JSON results", async () => {
     const server = mockServer();
-    const out = await handleToolCall(server, async () => ({ ok: true, n: 1 }));
+    const out = await handleToolCall(server, "test_tool", async () => ({ ok: true, n: 1 }));
     expect(out.content).toHaveLength(1);
     expect(out.content[0].type).toBe("text");
     expect(out.content[0].text).toContain('"ok": true');
@@ -21,7 +21,7 @@ describe("handleToolCall", () => {
   it("encodes binary ArrayBuffer as base64 text", async () => {
     const server = mockServer();
     const buf = new Uint8Array([1, 2, 3, 4]).buffer;
-    const out = await handleToolCall(server, async () => buf, { binary: true });
+    const out = await handleToolCall(server, "test_tool", async () => buf, { binary: true });
     expect(out.content[0].text).toMatch(/base64-encoded PDF/);
     expect(out.content[0].text).toContain("AQIDBA==");
   });
@@ -30,6 +30,7 @@ describe("handleToolCall", () => {
     const server = mockServer();
     const out = await handleToolCall(
       server,
+      "get_experiment",
       async () => {
         throw new FoundryApiError(404, { error: "missing" });
       },
@@ -44,7 +45,7 @@ describe("handleToolCall", () => {
   it("rethrows unexpected errors after logging", async () => {
     const server = mockServer();
     await expect(
-      handleToolCall(server, async () => {
+      handleToolCall(server, "test_tool", async () => {
         throw new Error("boom");
       }),
     ).rejects.toThrow("boom");

@@ -19,7 +19,7 @@ export function registerResultTools(server: McpServer, client: FoundryClient): v
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.results.list(args), {
+      handleToolCall(server, "list_results", () => client.results.list(args), {
         hint: "Use pagination; narrow by experiment via `list_experiment_results`.",
       }),
   );
@@ -33,7 +33,7 @@ export function registerResultTools(server: McpServer, client: FoundryClient): v
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.results.get(args), {
+      handleToolCall(server, "get_result", () => client.results.get(args), {
         hint: "Obtain `result_id` from `list_results` or `list_experiment_results`.",
       }),
   );
@@ -47,7 +47,7 @@ export function registerResultTools(server: McpServer, client: FoundryClient): v
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.results.listForExperiment(args), {
+      handleToolCall(server, "list_experiment_results", () => client.results.listForExperiment(args), {
         hint: "Ensure the experiment has completed enough workflow for results to exist.",
       }),
   );

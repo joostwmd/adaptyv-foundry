@@ -24,7 +24,7 @@ export function registerSequenceTools(
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.sequences.list(args), {
+      handleToolCall(server, "list_sequences", () => client.sequences.list(args), {
         hint: "Adjust limit/offset or filter experiments first.",
       }),
   );
@@ -38,7 +38,7 @@ export function registerSequenceTools(
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.sequences.get(args), {
+      handleToolCall(server, "get_sequence", () => client.sequences.get(args), {
         hint: "Resolve `sequence_id` via `list_sequences` or `list_experiment_sequences`.",
       }),
   );
@@ -52,7 +52,7 @@ export function registerSequenceTools(
       annotations: openWorld,
     },
     async (args) =>
-      handleToolCall(server, () => client.sequences.add(args), {
+      handleToolCall(server, "add_sequences", () => client.sequences.add(args), {
         hint: "Use the experiment `code` from `list_experiments`; sequences must be valid protein sequences.",
       }),
   );
@@ -66,7 +66,7 @@ export function registerSequenceTools(
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.sequences.listForExperiment(args), {
+      handleToolCall(server, "list_experiment_sequences", () => client.sequences.listForExperiment(args), {
         hint: "Confirm `experiment_id` via `list_experiments`.",
       }),
   );

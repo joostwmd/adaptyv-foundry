@@ -21,7 +21,7 @@ export function registerTokenTools(server: McpServer, client: FoundryClient): vo
       annotations: readOnly,
     },
     async (args) =>
-      handleToolCall(server, () => client.tokens.list(args), {
+      handleToolCall(server, "list_tokens", () => client.tokens.list(args), {
         hint: "Requires a token with permission to list tokens.",
       }),
   );
@@ -35,7 +35,7 @@ export function registerTokenTools(server: McpServer, client: FoundryClient): vo
       annotations: openWorld,
     },
     async (args) =>
-      handleToolCall(server, () => client.tokens.attenuate(args), {
+      handleToolCall(server, "attenuate_token", () => client.tokens.attenuate(args), {
         hint: "Parent token must allow attenuation; store the returned token securely.",
       }),
   );
@@ -49,7 +49,7 @@ export function registerTokenTools(server: McpServer, client: FoundryClient): vo
       annotations: destructive,
     },
     async (args) =>
-      handleToolCall(server, () => client.tokens.revoke(args), {
+      handleToolCall(server, "revoke_token", () => client.tokens.revoke(args), {
         hint: "After revoke, subsequent Foundry calls with this server identity will fail until credentials are rotated.",
       }),
   );
