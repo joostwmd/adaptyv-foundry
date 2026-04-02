@@ -1,6 +1,53 @@
 # adaptyv-foundry-mcp
 
-MCP server for the Adaptyv Foundry API (stdio or Streamable HTTP).
+MCP server for the [Adaptyv Foundry](https://foundry.adaptyvbio.com) HTTP API. Exposes experiments, targets, sequences, results, quotes, updates, tokens, and feedback as **MCP tools** so assistants (e.g. Cursor) can work with Foundry in natural language. Supports **stdio** (local) and **Streamable HTTP** at **`/mcp`** for remote clients.
+
+The HTTP entrypoint is **`/mcp`** (not the site root). **`GET /health`** is for load checks and is **not** protected by the MCP Bearer.
+
+TypeScript client used internally: [**`@adaptyv/foundry-sdk`**](../sdk/README.md).
+
+## How it works (architecture)
+
+| Layer | Role |
+|--------|------|
+| **SDK** | [`FoundryClient`](../sdk) from `@adaptyv/foundry-sdk`, or **`createMockFoundryClient`** when mock mode is on. Factory: [`src/foundry-client.ts`](src/foundry-client.ts). |
+| **MCP tools** | Wrappers around SDK resource methods with Zod-validated arguments — [`src/tools/`](src/tools/). |
+| **Transports** | **stdio** (default): MCP stdio transport in [`src/server/transports/stdio.ts`](src/server/transports/stdio.ts). **HTTP:** Hono + `WebStandardStreamableHTTPServerTransport` on **`/mcp`** in [`src/server/transports/http.ts`](src/server/transports/http.ts). |
+| **HTTP gateway** | Bearer auth for `/mcp`, optional `Origin` allowlist, request IDs — [`src/server/http/middleware/`](src/server/http/middleware/). |
+
+## Mock mode vs live (Foundry API)
+
+| | **Mock** | **Live API** |
+|--|----------|----------------|
+| **Env** | `FOUNDRY_USE_MOCK=1` (or `true` / `yes`) | unset or `0` |
+| **Backend** | In-memory **`createMockFoundryClient()`** — data from `@adaptyv/foundry-shared/mockdata`; **no** HTTP to Adaptyv | **`FoundryClient`** → **`https://foundry-api-public.adaptyvbio.com/api/v1`** (override with **`FOUNDRY_API_BASE_URL`**) with **`FOUNDRY_API_TOKEN`** |
+| **`FOUNDRY_API_TOKEN`** | Still **required** at startup; **not** sent to Foundry | **Bearer** on every Foundry request |
+| **HTTP MCP** | When `MODE=http`, **`MCP_HTTP_API_KEY`** still required; protects **`/mcp`** only | Same |
+
+## Demo host (example)
+
+Example deployment (operator may use mock or live Foundry):
+
+- **Health:** `https://adaptyv-foundry.onrender.com/health`
+- **MCP:** `https://adaptyv-foundry.onrender.com/mcp` — send **`Authorization: Bearer <MCP_HTTP_API_KEY>`** matching that deployment’s secret.
+
+For anything serious, deploy your own instance below.
+
+## Deploy your own instance
+
+The repo root [**Dockerfile**](../../Dockerfile) builds this package for **`MODE=http`** (`HOST=0.0.0.0`, `PORT` from the platform).
+
+**Render** — Blueprint [`render.yaml`](../../render.yaml), one-click:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/joostwmd/adaptyv-foundry)
+
+Set **`FOUNDRY_API_TOKEN`** and **`MCP_HTTP_API_KEY`** in the service environment; use **`https://<your-service>.onrender.com/mcp`** in Cursor with the same Bearer.
+
+**Fly.io** — [`fly.toml`](../../fly.toml) · [Deploy to Fly.io](https://fly.io/launch?repo=https://github.com/joostwmd/adaptyv-foundry)
+
+More context: [root README.md](../../README.md).
+
+---
 
 ## Environment variables
 
@@ -153,6 +200,8 @@ In the Inspector UI, run a tool such as **`list_targets`**. Expect a **Foundry A
 
 Cursor can talk to this server over **HTTP** the same way as MCP Inspector: the app must be **running** (`pnpm run start:http` or `pnpm exec tsx` with `MODE=http`), and the **Bearer must match** `MCP_HTTP_API_KEY`.
 
+**Remote:** use your deploy URL with path **`/mcp`**, e.g. `https://adaptyv-foundry.onrender.com/mcp`.
+
 1. **Merge** a server entry into your MCP config (do not replace the whole file if you already have servers):
    - **Project:** `.cursor/mcp.json` in this repo, or  
    - **Global:** `~/.cursor/mcp.json` on macOS/Linux.
@@ -178,7 +227,7 @@ Cursor can talk to this server over **HTTP** the same way as MCP Inspector: the 
 
 4. Fully **restart Cursor** if tools do not appear (MCP config is often cached).
 
-**UI path:** *Settings → Tools & MCP → Add MCP server* — choose an HTTP / remote style entry if offered, URL `http://127.0.0.1:3333/mcp`, and set header **`Authorization`** to **`Bearer <MCP_HTTP_API_KEY>`** (same as Inspector).
+**UI path:** *Settings → Tools & MCP → Add MCP server* — choose an HTTP / remote style entry if offered, URL `http://127.0.0.1:3333/mcp` (or your HTTPS `/mcp` URL), and set header **`Authorization`** to **`Bearer <MCP_HTTP_API_KEY>`** (same as Inspector).
 
 **Note:** Stdio (`command` + `args`) is still supported and does not need the HTTP server or `MCP_HTTP_API_KEY`; use HTTP when you want the same path as Inspector / remote clients.
 
