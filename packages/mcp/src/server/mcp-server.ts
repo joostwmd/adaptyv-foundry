@@ -1,6 +1,6 @@
 import { FoundryClient } from "@adaptyv/foundry-sdk";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { registerAllTools } from "./tools/index.js";
+import { registerAllTools } from "../tools/index.js";
 
 const SERVER_INSTRUCTIONS = `You are connected to the Adaptyv Foundry API via MCP tools.
 Use list_* tools to discover IDs before calling get_*.

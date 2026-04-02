@@ -1,6 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { FoundryApiError } from "@adaptyv/foundry-sdk";
+import { getMcpRequestId } from "./http/request-context.js";
 
 export async function handleToolCall<T>(
   server: McpServer,
@@ -24,6 +25,10 @@ export async function handleToolCall<T>(
       content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
     };
   } catch (err) {
+    const requestId = getMcpRequestId();
+    const logPrefix = requestId
+      ? `[adaptyv-foundry-mcp] requestId=${requestId}`
+      : "[adaptyv-foundry-mcp]";
     if (err instanceof FoundryApiError) {
       const msg =
         typeof err.body === "object" &&
@@ -37,12 +42,17 @@ export async function handleToolCall<T>(
       try {
         await server.sendLoggingMessage({
           level: "warning",
-          data: { kind: "FoundryApiError", status: err.status, body: err.body },
+          data: {
+            kind: "FoundryApiError",
+            status: err.status,
+            body: err.body,
+            ...(requestId ? { requestId } : {}),
+          },
         });
       } catch {
         /* client may not support logging */
       }
-      console.error("[adaptyv-foundry-mcp]", text);
+      console.error(logPrefix, text);
       return {
         isError: true,
         content: [{ type: "text", text }],
@@ -51,12 +61,16 @@ export async function handleToolCall<T>(
     try {
       await server.sendLoggingMessage({
         level: "error",
-        data: { kind: "unexpected", message: String(err) },
+        data: {
+          kind: "unexpected",
+          message: String(err),
+          ...(requestId ? { requestId } : {}),
+        },
       });
     } catch {
       /* ignore */
     }
-    console.error("[adaptyv-foundry-mcp] unexpected tool error", err);
+    console.error(logPrefix, "unexpected tool error", err);
     throw err;
   }
 }

@@ -1,7 +1,7 @@
 import { FoundryApiError } from "@adaptyv/foundry-sdk";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { describe, expect, it, vi } from "vitest";
-import { handleToolCall } from "../src/handle-tool-call.js";
+import { handleToolCall } from "../src/server/handle-tool-call.js";
 
 function mockServer(): McpServer {
   return {

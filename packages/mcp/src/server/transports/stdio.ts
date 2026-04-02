@@ -1,6 +1,6 @@
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { createFoundryClientForMcp, useMockFromEnv } from "../create-foundry-client.js";
-import { createMcpServer } from "../server.js";
+import { createFoundryClientForMcp, useMockFromEnv } from "../../foundry-client.js";
+import { createMcpServer } from "../mcp-server.js";
 
 export async function startStdio(): Promise<void> {
   if (useMockFromEnv()) {

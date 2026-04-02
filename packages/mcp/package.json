@@ -8,8 +8,13 @@
   "scripts": {
     "build": "tsup",
     "start": "tsx src/index.ts",
-    "inspector": "npx -y @modelcontextprotocol/inspector -e FOUNDRY_USE_MOCK=1 -- pnpm exec tsx src/index.ts",
-    "inspector:api": "npx -y @modelcontextprotocol/inspector -e FOUNDRY_USE_MOCK=0 -e FOUNDRY_API_TOKEN=\"${FOUNDRY_API_TOKEN:?Set FOUNDRY_API_TOKEN for live Foundry API}\" -- pnpm exec tsx src/index.ts",
+    "start:http": "MODE=http tsx src/index.ts",
+    "inspector": "pnpm run inspector:stdio",
+    "inspector:stdio": "npx -y @modelcontextprotocol/inspector -e FOUNDRY_USE_MOCK=1 -- pnpm exec tsx src/index.ts",
+    "inspector:stdio:live": "npx -y @modelcontextprotocol/inspector -e FOUNDRY_USE_MOCK=0 -e FOUNDRY_API_TOKEN=\"${FOUNDRY_API_TOKEN:?Set FOUNDRY_API_TOKEN for live Foundry API}\" -- pnpm exec tsx src/index.ts",
+    "inspector:api": "pnpm run inspector:stdio:live",
+    "inspector:http": "node scripts/dev-inspector-http.mjs",
+    "inspector:http:connect": "node scripts/inspector-http-connect.mjs",
     "test": "vitest run"
   },
   "dependencies": {

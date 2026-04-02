@@ -1,5 +1,5 @@
-import { startHttp } from "./transports/http.js";
-import { startStdio } from "./transports/stdio.js";
+import { startHttp } from "./server/transports/http.js";
+import { startStdio } from "./server/transports/stdio.js";
 
 const mode = (process.env.MODE ?? "stdio").toLowerCase();
 

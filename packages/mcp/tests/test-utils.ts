@@ -2,7 +2,7 @@ import type { FoundryClient } from "@adaptyv/foundry-sdk";
 import { createMockFoundryClient } from "@adaptyv/foundry-sdk/mock";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { createMcpServer } from "../src/server.js";
+import { createMcpServer } from "../src/server/mcp-server.js";
 
 export { createMockFoundryClient };
 

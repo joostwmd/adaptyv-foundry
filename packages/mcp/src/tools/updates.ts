@@ -4,7 +4,7 @@ import {
   listUpdatesInputSchema,
 } from "@adaptyv/foundry-shared";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { handleToolCall } from "../handle-tool-call.js";
+import { handleToolCall } from "../server/handle-tool-call.js";
 
 const readOnly = { readOnlyHint: true, openWorldHint: true } as const;
 
